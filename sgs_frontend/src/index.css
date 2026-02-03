@@ -128,7 +128,7 @@ button:disabled {
 }
 
 .button.ghost {
-  background: #ffffff44;
+  background: #ffffff88;
   border-color: var(--color-border);
 }
 
@@ -142,7 +142,7 @@ button:disabled {
 }
 
 .btn-secondary {
-  background: #ffffff44;
+  background: #ffffff88;
   color: var(--color-ink);
   border-color: var(--color-ink);
 }

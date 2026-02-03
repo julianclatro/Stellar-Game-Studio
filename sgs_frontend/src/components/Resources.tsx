@@ -222,6 +222,7 @@ bun install`}</code>
                 <li>Builds all Soroban contracts</li>
                 <li>Deploys contracts to Stellar testnet</li>
                 <li>Generates TypeScript bindings</li>
+                <li>Creates or reuses admin + player testnet wallets (funded via friendbot)</li>
                 <li>Writes contract IDs + dev wallet secrets to the root <code>.env</code></li>
               </ol>
             </div>
@@ -303,6 +304,11 @@ function CreateGameSection() {
           <p>
             Your contract must call <code>start_game</code> and <code>end_game</code> on the Game Hub contract.
             Use the client interface below.
+          </p>
+          <p>
+            For testnet, <code>bun run deploy</code> will reuse the shared mock Game Hub contract
+            (<code>CBRA7Z7RTHYGZVI7ZCW5OJLL6P7E53PQ5YOAM7CCDBKRELW72D4V4IM3</code>) when it exists,
+            or deploy a new mock if that contract is unavailable.
           </p>
           <div className="code-block">
             <pre>
@@ -425,8 +431,9 @@ members = [
           <p>Drop your UI module into the generated frontend and update bindings.</p>
           <div className="code-block">
             <pre>
-              <code>{`cp -r /path/to/game-ui src/games/imported-game
-bun run bindings imported-game`}</code>
+              <code>{`cp -r /path/to/game-ui imported-game-frontend/src/games/imported-game
+bun run bindings imported-game
+cp bindings/imported_game/src/index.ts imported-game-frontend/src/games/imported-game/bindings.ts`}</code>
             </pre>
           </div>
         </section>
@@ -447,8 +454,8 @@ function PublishGameSection() {
           <div className="code-block">
             <pre>
               <code>{`bun run build my-game
-stellar contract install --wasm target/wasm32v1-none/release/my_game.wasm --source <ADMIN> --network mainnet
-stellar contract deploy --wasm-hash <WASM_HASH> --source <ADMIN> --network mainnet -- \\
+stellar contract install --wasm target/wasm32v1-none/release/my_game.wasm --source-account <ADMIN_SECRET> --network mainnet
+stellar contract deploy --wasm-hash <WASM_HASH> --source-account <ADMIN_SECRET> --network mainnet -- \\
   --admin <ADMIN_ADDRESS> --game-hub <GAME_HUB_MAINNET_CONTRACT_ID>`}</code>
             </pre>
           </div>
@@ -462,7 +469,7 @@ stellar contract deploy --wasm-hash <WASM_HASH> --source <ADMIN> --network mainn
           </p>
           <div className="code-block">
             <pre>
-              <code>{`stellar contract invoke --id <GAME_HUB_MAINNET_CONTRACT_ID> --source <GAME_HUB_ADMIN> --network mainnet -- \\
+              <code>{`stellar contract invoke --id <GAME_HUB_MAINNET_CONTRACT_ID> --source-account <GAME_HUB_ADMIN_SECRET> --network mainnet -- \\
   add_game --game_id <YOUR_GAME_CONTRACT_ID> --developer <YOUR_DEVELOPER_ADDRESS>`}</code>
             </pre>
           </div>
@@ -471,7 +478,8 @@ stellar contract deploy --wasm-hash <WASM_HASH> --source <ADMIN> --network mainn
         <section className="content-block">
           <h2>Step 3: Build the production frontend</h2>
           <p>
-            The publish script exports a standalone container and swaps in CreitTech's wallet kit v2.
+            The publish script creates a standalone frontend, injects a runtime config, and swaps in
+            the standalone wallet hook.
           </p>
           <div className="code-block">
             <pre>
@@ -503,7 +511,10 @@ bun run publish my-game --out ../my-game-frontend --build`}</code>
 
         <section className="content-block">
           <h2>Step 5: Deploy the frontend</h2>
-          <p>Build output lives in <code>dist/</code>. Deploy it to any static host.</p>
+          <p>
+            If you used <code>--build</code>, the static files are in
+            <code>dist/&lt;game&gt;-frontend/dist</code>. Deploy the output to any static host.
+          </p>
           <div className="code-block">
             <pre>
               <code>{`# Vercel

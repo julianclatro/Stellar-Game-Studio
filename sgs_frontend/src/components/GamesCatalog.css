@@ -50,6 +50,7 @@
   font-family: var(--font-body);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  font-size: 0.875rem;
 }
 
 .hero-metrics {
@@ -93,25 +94,15 @@
   position: relative;
 }
 
-.hero-panel::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: var(--color-accent);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
 
 .hero-panel pre {
-  background: #0c0c0c;
+  background: #1a1a1a;
   border-radius: var(--radius-md);
   padding: 1rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   white-space: pre-wrap;
-  border: 1px solid #1f1f1f;
+  border: 1px solid #2a2a2a;
 }
 
 .hero-panel pre code {
@@ -177,6 +168,154 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.ai-ready-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ai-ready-shell {
+  background: linear-gradient(135deg, rgba(253, 218, 36, 0.2), rgba(43, 182, 161, 0.2));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: 2rem;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.ai-ready-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.ai-ready-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(18, 18, 18, 0.9);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+  margin-bottom: 0.75rem;
+}
+
+.ai-ready-header h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.ai-ready-header p {
+  color: var(--color-ink-muted);
+}
+
+.ai-ready-panel {
+  background: rgba(18, 18, 18, 0.92);
+  color: #ffffff;
+  border-radius: var(--radius-md);
+  padding: 1.4rem;
+  border: 1px solid rgba(18, 18, 18, 0.7);
+  box-shadow: var(--shadow-tight);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ai-ready-panel-title {
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-display);
+}
+
+.ai-ready-panel p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ai-ready-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ai-ready-tags span {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.ai-ready-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+}
+
+.ai-ready-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-tight);
+}
+
+.ai-ready-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.ai-ready-card h4 {
+  font-size: 1.1rem;
+}
+
+.ai-ready-chip {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(253, 218, 36, 0.4);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+}
+
+.ai-ready-footer {
+  color: var(--color-ink-muted);
+  font-size: 0.85rem;
+  margin-top: auto;
+}
+
+.ai-ready-benefits {
+  background: rgba(15, 76, 58, 0.08);
+  border-color: rgba(15, 76, 58, 0.2);
+}
+
+.ai-ready-benefit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-weight: 600;
+  color: var(--color-accent-strong);
 }
 
 .library-page {
@@ -313,9 +452,9 @@
 .quickstart-card code {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  background: #0c0c0c;
+  background: #1a1a1a;
   color: #f1f1f1;
-  border: 1px solid #1f1f1f;
+  border: 1px solid #2a2a2a;
   padding: 0.4rem 0.6rem;
   border-radius: 10px;
   display: inline-block;
@@ -332,12 +471,13 @@
 .command-card code {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  background: #0c0c0c;
+  background: #1a1a1a;
   color: #f1f1f1;
-  border: 1px solid #1f1f1f;
+  border: 1px solid #2a2a2a;
   padding: 0.4rem 0.6rem;
   border-radius: 10px;
   display: inline-block;
+  margin-top: auto;
 }
 
 @media (max-width: 900px) {
@@ -346,6 +486,10 @@
   }
 
   .hero-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-ready-header {
     grid-template-columns: 1fr;
   }
 

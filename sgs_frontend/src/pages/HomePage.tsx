@@ -43,7 +43,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <li>Publish with a production wallet flow</li>
           </ol>
           <pre>
-            <code>{`bun run setup\nbun run create my-game\nbun run dev:game my-game\nbun run publish my-game --build`}</code>
+            <code>{`bun run setup\nbun run create my-game\nbun run dev:game my-game\nbun run build my-game\nbun run deploy my-game\nbun run publish my-game --build`}</code>
           </pre>
         </div>
       </section>
@@ -71,19 +71,83 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
         <div className="quickstart-grid">
           <div className="quickstart-card">
-            <h4>1. Fork Repository</h4>
-            <p>Fork and clone the Stellar Game Studio repo.</p>
-            <code className="code-compact">git clone https://github.com/jamesbachini/Stellar-Game-Studio</code>
-          </div>
-          <div className="quickstart-card">
-            <h4>2. Setup</h4>
+            <h4>1. Setup</h4>
             <p>Install dependencies, build, and deploy contracts.</p>
             <code>bun run setup</code>
           </div>
           <div className="quickstart-card">
-            <h4>3. Build The Game</h4>
-            <p>Export a standalone build for your new game.</p>
-            <code>bun run publish my-game</code>
+            <h4>2. Create Game</h4>
+            <p>Scaffold a new contract and standalone frontend.</p>
+            <code>bun run create my-game</code>
+          </div>
+          <div className="quickstart-card">
+            <h4>3. Run Dev Environment</h4>
+            <p>Run up a local development environment to build your game.</p>
+            <code>bun run dev:game my-game</code>
+          </div>
+        </div>
+      </section>
+
+      <section id="ai-ready" className="ai-ready-section">
+        <div className="ai-ready-shell">
+          <div className="ai-ready-header">
+            <div>
+              <span className="ai-ready-pill">AI Ready</span>
+              <h3>AI Ready</h3>
+              <p>
+                This repo ships with <code>AGENTS.md</code> and <code>CLAUDE.md</code> to guide Codex and Claude
+                through the exact contract, bindings, and frontend steps required to build a Stellar game.
+              </p>
+            </div>
+            <div className="ai-ready-panel">
+              <div className="ai-ready-panel-title">What the AI gets right, fast</div>
+              <p>
+                Repo map, Game Hub rules, deterministic randomness guidance, bindings workflow, frontend wiring,
+                and QA steps are all encoded so assistants stay consistent with studio conventions.
+              </p>
+              <div className="ai-ready-tags">
+                <span>Repo Map</span>
+                <span>ECOSYSTEM CONSTRAINTS</span>
+                <span>Deterministic RNG</span>
+                <span>Bindings</span>
+              </div>
+            </div>
+          </div>
+          <div className="ai-ready-grid">
+            <div className="ai-ready-card">
+              <div className="ai-ready-card-header">
+                <span className="ai-ready-chip">Codex</span>
+                <h4>AGENTS.md</h4>
+              </div>
+              <p>
+                A Codex-focused playbook with repo navigation, contract checklist, TTL rules, deterministic RNG
+                patterns, and frontend wiring notes.
+              </p>
+              <div className="ai-ready-footer">Built for precise, step-by-step automation.</div>
+            </div>
+            <div className="ai-ready-card">
+              <div className="ai-ready-card-header">
+                <span className="ai-ready-chip">Claude</span>
+                <h4>CLAUDE.md</h4>
+              </div>
+              <p>
+                The same authoritative guidance tuned for Claude, keeping game logic, bindings, and studio
+                integration aligned with repo standards.
+              </p>
+              <div className="ai-ready-footer">Reduces missed steps during assisted builds.</div>
+            </div>
+            <div className="ai-ready-card ai-ready-benefits">
+              <h4>Why it helps game devs</h4>
+              <p>
+                Faster onboarding, fewer integration mistakes, and a consistent Game Hub lifecycle so teams can
+                focus on gameplay instead of plumbing.
+              </p>
+              <div className="ai-ready-benefit-row">
+                <span>Speed</span>
+                <span>Consistency</span>
+                <span>Confidence</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -58,7 +58,7 @@ export function Layout({ children, currentPage, onNavigate }: LayoutProps) {
       <main className="studio-main">{children}</main>
 
       <footer className="studio-footer">
-        <span>Built with ♥️ for Stellar game developers</span>
+        <span className="footer-meta">Built with ♥️ for Stellar game developers</span>
       </footer>
     </div>
   );
