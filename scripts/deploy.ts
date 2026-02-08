@@ -197,6 +197,7 @@ console.log('📝 Generating new admin identity...');
 const adminKeypair = Keypair.random();
 
 walletAddresses.admin = adminKeypair.publicKey();
+walletSecrets.admin = adminKeypair.secret();
 
 try {
   await ensureTestnetFunded(walletAddresses.admin);
@@ -367,6 +368,7 @@ VITE_DEV_PLAYER1_ADDRESS=${walletAddresses.player1}
 VITE_DEV_PLAYER2_ADDRESS=${walletAddresses.player2}
 
 # Dev wallet secret keys (WARNING: Never commit this file!)
+VITE_DEV_ADMIN_SECRET=${walletSecrets.admin}
 VITE_DEV_PLAYER1_SECRET=${walletSecrets.player1}
 VITE_DEV_PLAYER2_SECRET=${walletSecrets.player2}
 `;
