@@ -1,0 +1,312 @@
+{
+  "case_id": 1,
+  "title": "The Meridian Manor Incident",
+  "commitment": "0xda2854879bbc42fef0fe60c2c4fb568eff7365e08df822e92c04d51eaf7e9a9d",
+  "rooms": [
+    {
+      "id": "bedroom",
+      "name": "The Bedroom",
+      "description": "The crime scene. A lavish master bedroom now draped in an unsettling stillness. The body has been removed, but the faint scent of something chemical lingers in the air. Silk curtains frame a window overlooking the garden.",
+      "connections": [
+        "lounge",
+        "study"
+      ],
+      "clues": [
+        {
+          "id": "perfume_bottle",
+          "name": "Broken Perfume Bottle",
+          "description": "Shattered glass on the nightstand. The liquid smells chemical, not floral — this isn't perfume.",
+          "is_key_evidence": true,
+          "related_suspect": "victor",
+          "icon": "flask"
+        },
+        {
+          "id": "smudged_fingerprints",
+          "name": "Smudged Fingerprints",
+          "description": "Multiple sets of smudged fingerprints on the door handle. Impossible to identify any single person.",
+          "is_key_evidence": false,
+          "related_suspect": "",
+          "icon": "fingerprint"
+        },
+        {
+          "id": "torn_letter",
+          "name": "Torn Business Letter",
+          "description": "A partially torn letter mentioning a hostile takeover. The signature is missing.",
+          "is_key_evidence": false,
+          "related_suspect": "victor",
+          "icon": "file-text"
+        }
+      ],
+      "suspects_present": [
+        "isabelle"
+      ]
+    },
+    {
+      "id": "kitchen",
+      "name": "The Kitchen",
+      "description": "A professional-grade kitchen still warm from the evening's dinner service. Copper pots hang from a ceiling rack. The dessert course sits half-prepared on the marble counter.",
+      "connections": [
+        "lounge",
+        "garden"
+      ],
+      "clues": [
+        {
+          "id": "wine_glass",
+          "name": "Wine Glass with Residue",
+          "description": "One wine glass wasn't properly washed. A faint discoloration stains the inside — could be nothing, could be something.",
+          "is_key_evidence": false,
+          "related_suspect": "",
+          "icon": "wine"
+        },
+        {
+          "id": "missing_knife",
+          "name": "Missing Chef's Knife",
+          "description": "A gap in the magnetic knife rack. Elena insists she had a full set before tonight. But the murder wasn't by knife...",
+          "is_key_evidence": false,
+          "related_suspect": "elena",
+          "icon": "sword"
+        }
+      ],
+      "suspects_present": [
+        "elena",
+        "priya"
+      ]
+    },
+    {
+      "id": "study",
+      "name": "The Study",
+      "description": "Dark wood paneling and leather chairs. A mahogany desk is buried under stacks of legal documents and financial reports. The air smells of old paper and expensive whiskey.",
+      "connections": [
+        "bedroom",
+        "garden"
+      ],
+      "clues": [
+        {
+          "id": "insurance_docs",
+          "name": "Insurance Documents",
+          "description": "Victor's briefcase lies open. Inside: insurance documents with a suspiciously large payout clause, recently amended.",
+          "is_key_evidence": true,
+          "related_suspect": "victor",
+          "icon": "briefcase"
+        },
+        {
+          "id": "crumpled_note",
+          "name": "Crumpled Note",
+          "description": "A handwritten note, crumpled and tossed near the wastebin: \"We need to talk about what you did. Tonight.\" Unsigned.",
+          "is_key_evidence": true,
+          "related_suspect": "victor",
+          "icon": "message-square"
+        }
+      ],
+      "suspects_present": [
+        "victor",
+        "james"
+      ]
+    },
+    {
+      "id": "lounge",
+      "name": "The Lounge",
+      "description": "An elegant sitting room with velvet sofas and a crackling fireplace. A half-finished chess game sits on a side table. The phone sits on its cradle — recently used.",
+      "connections": [
+        "bedroom",
+        "kitchen"
+      ],
+      "clues": [
+        {
+          "id": "phone_records",
+          "name": "Phone Records",
+          "description": "Dr. Webb's call log is on the table. It shows a 2-minute call at 7:45 PM — not the 'hour-long call' he claims.",
+          "is_key_evidence": true,
+          "related_suspect": "marcus",
+          "icon": "phone"
+        },
+        {
+          "id": "medicine_bottle",
+          "name": "Empty Medicine Bottle",
+          "description": "A prescription bottle with the victim's name. Recently emptied. The label reads a common heart medication.",
+          "is_key_evidence": false,
+          "related_suspect": "marcus",
+          "icon": "pill"
+        }
+      ],
+      "suspects_present": [
+        "marcus",
+        "celeste"
+      ]
+    },
+    {
+      "id": "garden",
+      "name": "The Garden",
+      "description": "A moonlit garden with manicured hedges and a stone path winding between rose bushes. The kitchen door and study window both open onto this space. Fresh mud near the bedroom window.",
+      "connections": [
+        "kitchen",
+        "study"
+      ],
+      "clues": [
+        {
+          "id": "muddy_footprints",
+          "name": "Muddy Footprints",
+          "description": "A trail of muddy footprints leading from the kitchen door around to the bedroom window. Someone was outside recently.",
+          "is_key_evidence": false,
+          "related_suspect": "thomas",
+          "icon": "footprints"
+        },
+        {
+          "id": "camera_photos",
+          "name": "Camera with Photos",
+          "description": "Ren's camera. The timestamps on his garden photos show the garden was empty at 8 PM — contradicting Thomas's claim that he was there all evening.",
+          "is_key_evidence": true,
+          "related_suspect": "thomas",
+          "icon": "camera"
+        }
+      ],
+      "suspects_present": [
+        "thomas",
+        "ren"
+      ]
+    }
+  ],
+  "suspects": [
+    {
+      "id": "victor",
+      "name": "Victor Ashford",
+      "role": "Business Partner",
+      "room": "study",
+      "dialogue": {
+        "default": "I was reviewing documents all evening. This is a tragedy — we had so many plans together.",
+        "clue_triggered": {
+          "insurance_docs": "Those documents are routine business. Every partner has them. You're grasping at straws.",
+          "crumpled_note": "...Where did you find that? It's not what it looks like. Business partners have disagreements.",
+          "torn_letter": "That letter is about a completely separate matter. Corporate restructuring. Nothing sinister."
+        },
+        "confrontation": {
+          "perfume_bottle+insurance_docs": "You don't understand the pressure I was under. He was going to ruin everything. Everything I built. I had no choice."
+        }
+      }
+    },
+    {
+      "id": "elena",
+      "name": "Elena Castillo",
+      "role": "Personal Chef",
+      "room": "kitchen",
+      "dialogue": {
+        "default": "I was preparing the dessert course all evening. Crème brûlée — it requires constant attention. I never left this kitchen.",
+        "clue_triggered": {
+          "missing_knife": "That knife! I know I had the full set when I started. Someone must have taken it. But who would... no, I'm sure it'll turn up.",
+          "wine_glass": "I washed all the glasses myself. If one wasn't clean, it must have been used after I finished."
+        },
+        "confrontation": {}
+      }
+    },
+    {
+      "id": "marcus",
+      "name": "Dr. Marcus Webb",
+      "role": "Family Doctor",
+      "room": "lounge",
+      "dialogue": {
+        "default": "I was on a long phone call in the lounge. Medical consultation — you know how these things go. Very involved.",
+        "clue_triggered": {
+          "phone_records": "...Two minutes? That can't be right. Well, perhaps I... I may have exaggerated slightly. I stepped out briefly.",
+          "medicine_bottle": "That's the victim's heart medication. I prescribed it myself. It's perfectly routine — nothing unusual about it."
+        },
+        "confrontation": {
+          "phone_records+medicine_bottle": "Fine. My call was short. I stepped out for air and... I saw Victor coming from the bedroom corridor. I didn't think much of it at the time. I wish I had."
+        }
+      }
+    },
+    {
+      "id": "isabelle",
+      "name": "Isabelle Fontaine",
+      "role": "Art Dealer & Ex-Lover",
+      "room": "bedroom",
+      "dialogue": {
+        "default": "I found him. I went to check on him and he was... I can't. I just can't talk about it. He was already cold.",
+        "clue_triggered": {
+          "perfume_bottle": "That's not his scent. He never wore anything like that. Someone brought this here — it's not from this room.",
+          "smudged_fingerprints": "Everyone came in after I screamed. The fingerprints could be anyone's."
+        },
+        "confrontation": {}
+      }
+    },
+    {
+      "id": "thomas",
+      "name": "Thomas Grey",
+      "role": "Groundskeeper",
+      "room": "garden",
+      "dialogue": {
+        "default": "I was tending the garden all evening. Pruning the roses — they need attention this time of year. I didn't see anything unusual.",
+        "clue_triggered": {
+          "camera_photos": "...The garden was empty? I... I may have stepped away briefly. For a smoke. I'm not supposed to smoke on the grounds.",
+          "muddy_footprints": "Those are my boots, yes. I walk around the whole property every evening. That's my job."
+        },
+        "confrontation": {
+          "camera_photos+muddy_footprints": "Alright, fine! I was sneaking a cigarette by the bedroom window. The Madam doesn't allow smoking. I didn't see anything, I swear."
+        }
+      }
+    },
+    {
+      "id": "priya",
+      "name": "Priya Sharma",
+      "role": "Accountant",
+      "room": "kitchen",
+      "dialogue": {
+        "default": "I was helping Elena in the kitchen. She can confirm — I was right here the whole time. We were discussing the household accounts between courses.",
+        "clue_triggered": {
+          "insurance_docs": "I handle the household finances, not the business side. Victor manages his own affairs. But those payout numbers do seem... unusually high."
+        },
+        "confrontation": {}
+      }
+    },
+    {
+      "id": "james",
+      "name": "James Whitmore",
+      "role": "Lawyer",
+      "room": "study",
+      "dialogue": {
+        "default": "Victor and I were reviewing contracts in the study. Standard quarterly review. Nothing out of the ordinary.",
+        "clue_triggered": {
+          "insurance_docs": "Victor was nervous all evening, truth be told. He kept checking his watch. At one point he stepped out for 'fresh air.' He was gone for maybe fifteen minutes.",
+          "crumpled_note": "I didn't write that note, if that's what you're implying. But Victor received it earlier. I saw him read it and... he went pale."
+        },
+        "confrontation": {
+          "insurance_docs+crumpled_note": "Look, I'm Victor's lawyer, but I'm not going to obstruct an investigation. He was agitated all night. He left the study around 8 PM and came back smelling of something chemical. I assumed it was the garden."
+        }
+      }
+    },
+    {
+      "id": "celeste",
+      "name": "Celeste Duval",
+      "role": "Victim's Sister",
+      "room": "lounge",
+      "dialogue": {
+        "default": "My brother... I can't believe he's gone. We were just talking about the estate yesterday. He seemed fine. Happy, even.",
+        "clue_triggered": {
+          "medicine_bottle": "He was on heart medication, yes. Marcus prescribed it. But he was getting better — at least that's what Marcus told us.",
+          "torn_letter": "A hostile takeover? My brother never mentioned any business troubles. Victor handled all of that."
+        },
+        "confrontation": {}
+      }
+    },
+    {
+      "id": "ren",
+      "name": "Ren Nakamura",
+      "role": "Photographer & Guest",
+      "room": "garden",
+      "dialogue": {
+        "default": "I was photographing the garden at dusk. The light was incredible — golden hour lasts forever here. I have the photos to prove it.",
+        "clue_triggered": {
+          "camera_photos": "Yes, look at the timestamps. The garden was empty at 8 PM. Thomas claims he was there, but my camera doesn't lie.",
+          "muddy_footprints": "I noticed those too. They go from the kitchen door around to the bedroom window. That's not the path to the roses."
+        },
+        "confrontation": {}
+      }
+    }
+  ],
+  "weapons": [
+    "poison_vial",
+    "kitchen_knife",
+    "candlestick",
+    "letter_opener",
+    "garden_shears"
+  ]
+}

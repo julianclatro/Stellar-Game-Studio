@@ -1,0 +1,104 @@
+@import "tailwindcss/theme";
+@import "tailwindcss/utilities";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --color-bg: #0a0a0f;
+  --color-surface: #14141f;
+  --color-surface-light: #1e1e2e;
+  --color-border: rgba(232, 230, 227, 0.08);
+  --color-ink: #e8e6e3;
+  --color-muted: #8a8a9a;
+  --color-gold: #d4a843;
+  --color-gold-dim: rgba(212, 168, 67, 0.15);
+  --color-crimson: #c8463b;
+  --color-crimson-dim: rgba(200, 70, 59, 0.15);
+  --color-teal: #2a9d8f;
+  --color-teal-dim: rgba(42, 157, 143, 0.15);
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+}
+
+html {
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  background: var(--color-bg);
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background:
+    radial-gradient(800px circle at 20% 10%, rgba(212, 168, 67, 0.04), transparent 60%),
+    radial-gradient(600px circle at 80% 90%, rgba(200, 70, 59, 0.03), transparent 60%),
+    var(--color-bg);
+  color: var(--color-ink);
+  line-height: 1.6;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: rgba(212, 168, 67, 0.3);
+  color: var(--color-ink);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(232, 230, 227, 0.12);
+  border-radius: 3px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px rgba(212, 168, 67, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(212, 168, 67, 0.6); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out;
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="500" viewBox="0 0 400 500">
+  <rect width="100%" height="100%" fill="#0a0a0f" rx="8"/>
+  <rect x="4" y="4" width="392" height="492" fill="none" stroke="#14141f" stroke-width="2" rx="6" stroke-dasharray="8 4"/>
+  <circle cx="200" cy="195" r="14" fill="none" stroke="#e8e6e3" stroke-width="2.5"/>
+  <path d="M180 235 Q180 215 200 215 Q220 215 220 235" fill="none" stroke="#e8e6e3" stroke-width="2.5"/>
+  <text x="200" y="290" text-anchor="middle" fill="#e8e6e3" font-family="Georgia, serif" font-size="16" font-weight="bold">Dr. Marcus Webb</text>
+  <text x="200" y="310" text-anchor="middle" fill="#e8e6e3" font-family="Georgia, serif" font-size="11" opacity="0.5">suspects/marcus.png</text>
+</svg>

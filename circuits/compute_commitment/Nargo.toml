@@ -1,0 +1,6 @@
+[package]
+name = "compute_commitment"
+type = "bin"
+authors = [""]
+
+[dependencies]

@@ -1,0 +1,6 @@
+[package]
+name = "clue_verify"
+type = "bin"
+authors = ["ZK Detective Team"]
+
+[dependencies]

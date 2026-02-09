@@ -1,0 +1,6 @@
+[package]
+name = "accusation"
+type = "bin"
+authors = ["ZK Detective Team"]
+
+[dependencies]

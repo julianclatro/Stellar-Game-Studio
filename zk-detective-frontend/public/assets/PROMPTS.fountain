@@ -1,0 +1,397 @@
+Title: ZK Detective: Case Closed on Soroban
+Credit: Asset Generation Screenplay
+Author: Stellar Game Studio
+Source: PROMPTS.md — 34 Nano Banana image prompts
+Draft date: 2026-02-09
+Style Anchor: Dark noir detective illustration, ink linework with muted watercolor washes. Color palette: near-black backgrounds (#0a0a0f), deep navy surfaces (#14141f), warm cream highlights (#e8e6e3), antique gold accents (#d4a843), deep crimson (#c8463b), muted teal (#2a9d8f). 1920s murder mystery atmosphere. Moody lighting with strong shadows. Transparent PNG where noted.
+Notes: 34 prompts total — 3 style probes (Phase 0) + 31 production assets (Phase 1). Feed each prompt to Nano Banana one at a time. The pipeline extracts `Style Anchor` from this title page and prepends it to every action/dialogue prompt before generation.
+
+===
+
+# ACT ONE: THE REHEARSAL
+
+= Phase 0 — Test the visual style across all 3 asset types before committing to 31 production generations. If the style doesn't land, tweak the Style Anchor on the title page and re-run only these 3 probes.
+
+## THE THREE TESTS
+
+= One probe per asset type: scene (room), portrait (suspect), icon (weapon). Each is identical to its Phase 1 counterpart plus a meta-instruction for style calibration.
+
+INT. THE STUDY - NIGHT - STYLE PROBE #S1#
+
+= Tests: environment rendering, ink linework weight, watercolor wash density, lighting/shadow interplay, color palette accuracy. Why the Study: richest visual elements (fireplace glow, bookshelves, scattered papers, whiskey decanter) — tests the most rendering challenges in one image.
+
+A dark wood-paneled study in a Victorian manor. A heavy mahogany desk covered in scattered documents and an open briefcase. A whiskey decanter and glass sit on a side table. A crackling fireplace casts flickering orange light. Floor-to-ceiling bookshelves line the walls. A crumpled note lies on the floor near the desk. Rich, heavy atmosphere with deep browns, amber, and gold. Viewed at an angle from the door. No text.
+
+*This is a style reference test. Focus on establishing: ink linework weight, watercolor wash density, color palette accuracy (#0a0a0f, #14141f, #e8e6e3, #d4a843, #c8463b, #2a9d8f), and overall 1920s noir mood.*
+
+[[file: (same as B3) | size: 800x450px]]
+
+CUT TO:
+
+VICTOR ASHFORD — STYLE PROBE #S2#
+(Business Partner)
+
+= Tests: face/body detail, dramatic side-lighting, transparent background handling, gold accent rendering. Why Victor: tailored suit + gold tie pin tests both fine detail and the warm accent color system.
+
+Portrait of a middle-aged man in a sharp tailored suit with a silk tie. Clean-shaven, angular jawline, calculating dark eyes. Slicked-back hair. Confident but guarded expression — a man with secrets. Gold tie pin catches the light. Dramatic noir side-lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+*This is a style reference test. Focus on establishing: ink linework weight, watercolor wash density, color palette accuracy (#0a0a0f, #14141f, #e8e6e3, #d4a843, #c8463b, #2a9d8f), and overall 1920s noir mood.*
+
+[[file: (same as C1) | size: 400x500px]]
+
+CUT TO:
+
+.STYLE TEST: POISON VIAL #S3#
+
+= Tests: small-scale detail, object centering, crimson accent rendering, transparency. Why Poison Vial: glass, liquid, vapor, and label detail all at 200px — if this reads clearly, all icons will work.
+
+A small glass vial with a cork stopper containing luminous green-purple liquid. A skull-and-crossbones label partially visible. Faint vapor wisps from the top. Crimson undertone accent. Centered on transparent background. 200x200px. Ink linework with watercolor.
+
+*This is a style reference test. Focus on establishing: ink linework weight, watercolor wash density, color palette accuracy (#0a0a0f, #14141f, #e8e6e3, #d4a843, #c8463b, #2a9d8f), and overall 1920s noir mood.*
+
+[[file: (same as E1) | size: 200x200px]]
+
+> CHECKPOINT <
+
+/* Review the 3 style probes above. If the style matches the noir detective aesthetic (correct ink weight, watercolor density, palette accuracy, and 1920s mood), proceed to Act Two. If adjustments are needed, tweak the Style Anchor on the title page and re-run the 3 probes before generating the full batch. */
+
+===
+
+# ACT TWO: PRODUCTION NIGHT
+
+= Phase 1 — 31 production assets. All prompts below use the Style Anchor from the title page as a prefix.
+
+## SEQUENCE A: ESTABLISHING SHOT
+
+= 1 title screen asset. The manor exterior sets the cinematic tone before the player enters.
+
+EXT. MERIDIAN MANOR - NIGHT #A1#
+
+= The player's first impression. Cinematic wide shot establishing the 1920s noir world.
+
+A grand Victorian manor at night seen from the front garden path. Moonlit sky with thin clouds. The mansion has ornate architecture with five visible windows — one glowing faintly gold (the bedroom). Wrought iron gates in foreground. Rose bushes and hedges line the stone path. Atmospheric fog at the ground level. Dark silhouette of the manor against a deep navy sky. Ink linework with watercolor washes in navy, charcoal, and gold. Cinematic wide shot. No text.
+
+[[file: title/manor-exterior.png | size: 800x500px]]
+
+===
+
+## SEQUENCE B: THE FIVE ROOMS
+
+= 5 room illustrations. Each room is a playable scene in the game. Viewed from the doorway/entrance — the detective's POV arriving at each location.
+
+INT. MASTER BEDROOM - NIGHT #B1#
+
+= The crime scene. Where the body was found. Isabelle Fontaine is present.
+
+A lavish master bedroom crime scene in a Victorian manor. Silk curtains frame a tall window overlooking a moonlit garden. An ornate nightstand with a shattered perfume bottle, its chemical residue visible. The bed is disheveled. Police tape or chalk outline subtly suggested. Dim golden lamplight casts long shadows across the room. Muted warm tones — cream, gold, deep shadows. Viewed from the doorway perspective. Atmospheric and unsettling. No text.
+
+[[file: rooms/bedroom.png | size: 800x450px | game_id: bedroom]]
+
+CUT TO:
+
+INT. THE KITCHEN - NIGHT #B2#
+
+= The chef's domain. Elena Castillo and Priya Sharma are present.
+
+A professional Victorian manor kitchen at night. Copper pots hang from ceiling racks. A marble counter has a half-prepared dessert and two wine glasses — one with a suspicious residue. A magnetic knife rack on the wall has one conspicuous empty slot. Gas lamps cast warm amber light. Tile floor with checkerboard pattern. Warm but tense atmosphere. Viewed from the entrance. No text.
+
+[[file: rooms/kitchen.png | size: 800x450px | game_id: kitchen]]
+
+CUT TO:
+
+INT. THE STUDY - NIGHT #B3#
+
+= Victor's base of operations. Victor Ashford and James Whitmore are present.
+
+A dark wood-paneled study in a Victorian manor. A heavy mahogany desk covered in scattered documents and an open briefcase. A whiskey decanter and glass sit on a side table. A crackling fireplace casts flickering orange light. Floor-to-ceiling bookshelves line the walls. A crumpled note lies on the floor near the desk. Rich, heavy atmosphere with deep browns, amber, and gold. Viewed at an angle from the door. No text.
+
+[[file: rooms/study.png | size: 800x450px | game_id: study]]
+
+CUT TO:
+
+INT. THE LOUNGE - NIGHT #B4#
+
+= The social room. Dr. Marcus Webb and Celeste Duval are present.
+
+An elegant Victorian lounge at night. Deep velvet sofas arranged around a low table with an unfinished chess game. A fireplace with dying embers. A vintage rotary telephone sits on a side table with its receiver slightly off the hook. An empty medicine bottle sits near the phone. Crystal chandelier provides dim golden light. Tense, sophisticated atmosphere. Deep burgundy, navy, and gold tones. No text.
+
+[[file: rooms/lounge.png | size: 800x450px | game_id: lounge]]
+
+CUT TO:
+
+EXT. MANOR GARDEN - NIGHT #B5#
+
+= The outdoor escape route. Thomas Grey and Ren Nakamura are present.
+
+A moonlit Victorian manor garden at night. Stone path winding through manicured hedges and rose bushes. Muddy boot prints clearly visible on the path. A stone bench near the garden wall. The manor's bedroom window is visible in the background, lit faintly. A camera tripod sits abandoned near the roses. Cool teal and navy tones with moonlight silver highlights. Mysterious, exposed atmosphere. No text.
+
+[[file: rooms/garden.png | size: 800x450px | game_id: garden]]
+
+===
+
+## SEQUENCE C: THE USUAL SUSPECTS
+
+= 9 suspect portraits. All bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Noir lighting with dramatic side light. Transparent PNG background. 400x500px. Grouped by room location per case data.
+
+INT. THE STUDY - CONTINUOUS
+
+= Study suspects — Victor Ashford (Business Partner) and James Whitmore (Lawyer).
+
+VICTOR ASHFORD #C1#
+(Business Partner — Study)
+
+Portrait of a middle-aged man in a sharp tailored suit with a silk tie. Clean-shaven, angular jawline, calculating dark eyes. Slicked-back hair. Confident but guarded expression — a man with secrets. Gold tie pin catches the light. Dramatic noir side-lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/victor.png | size: 400x500px | game_id: victor | zk_id: 1]]
+
+JAMES WHITMORE #C7#
+(Lawyer — Study)
+
+Portrait of a middle-aged man in an expensive three-piece suit. Distinguished bearing, silver at the temples. Calculating blue eyes. A legal pad barely visible at the bottom edge. The expression of a man who knows too much. Formal, slightly cold lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/james.png | size: 400x500px | game_id: james | zk_id: 7]]
+
+CUT TO:
+
+INT. THE KITCHEN - CONTINUOUS
+
+= Kitchen suspects — Elena Castillo (Personal Chef) and Priya Sharma (Accountant).
+
+ELENA CASTILLO #C2#
+(Personal Chef — Kitchen)
+
+Portrait of a woman in professional chef's whites with a clean apron. Dark hair pulled back neatly. Warm brown eyes with a kind but observant expression — she notices everything. Slight flour dust on her shoulder. Warm amber lighting from below suggesting kitchen warmth. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/elena.png | size: 400x500px | game_id: elena | zk_id: 2]]
+
+PRIYA SHARMA #C6#
+(Accountant — Kitchen)
+
+Portrait of a sharp-featured woman in professional business attire — blazer, crisp collar. Hair in a neat bun. Intelligent, analytical eyes behind stylish glasses. Precise and observant demeanor. She holds a pen like a weapon. Cool neutral lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/priya.png | size: 400x500px | game_id: priya | zk_id: 6]]
+
+CUT TO:
+
+INT. MASTER BEDROOM - CONTINUOUS
+
+= Bedroom suspect — Isabelle Fontaine (Art Dealer & Ex-Lover). Found the body.
+
+ISABELLE FONTAINE #C4#
+(Art Dealer & Ex-Lover — Bedroom)
+
+Portrait of an elegant woman in a silk blouse and statement jewelry. Expressive dark eyes with visible grief behind a composed facade. Wavy hair falling past her shoulders. An artist's ring on her finger. Beautiful but haunted. Dramatic chiaroscuro lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/isabelle.png | size: 400x500px | game_id: isabelle | zk_id: 4]]
+
+CUT TO:
+
+INT. THE LOUNGE - CONTINUOUS
+
+= Lounge suspects — Dr. Marcus Webb (Family Doctor) and Celeste Duval (Victim's Sister).
+
+DR. MARCUS WEBB #C3#
+(Family Doctor — Lounge)
+
+Portrait of a distinguished older man with gray temples and wire-rimmed glasses. Medical coat over a dress shirt. Tired, intelligent eyes with a hint of nervous energy. A stethoscope around his neck. Composed exterior masking anxiety. Cool clinical lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/marcus.png | size: 400x500px | game_id: marcus | zk_id: 3]]
+
+CELESTE DUVAL #C8#
+(Victim's Sister — Lounge)
+
+Portrait of a woman in formal dark clothing suggesting mourning. Delicate features, red-rimmed eyes from crying but maintaining dignity. A locket necklace. Devastated yet determined expression — she wants answers. Soft, melancholic side-lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/celeste.png | size: 400x500px | game_id: celeste | zk_id: 8]]
+
+CUT TO:
+
+EXT. MANOR GARDEN - CONTINUOUS
+
+= Garden suspects — Thomas Grey (Groundskeeper) and Ren Nakamura (Photographer & Guest).
+
+THOMAS GREY #C5#
+(Groundskeeper — Garden)
+
+Portrait of a weathered middle-aged man in work clothes — flannel shirt, rough hands. Strong jaw, deep-set eyes with a guarded, closed-off expression. Sun-damaged skin. A leaf or twig caught in his collar. Earthy, natural lighting with deep shadows. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/thomas.png | size: 400x500px | game_id: thomas | zk_id: 5]]
+
+REN NAKAMURA #C9#
+(Photographer & Guest — Garden)
+
+Portrait of a young man with an artistic, casual look — open collar shirt, camera strap visible at the shoulder. Sharp perceptive eyes, slightly messy hair. An outsider who sees everything through a lens. Creative energy meets quiet observation. Natural mixed lighting. Bust/shoulder-up, 3/4 angle, looking slightly toward viewer. Ink linework with muted watercolor. Transparent background.
+
+[[file: suspects/ren.png | size: 400x500px | game_id: ren | zk_id: 9]]
+
+===
+
+## SEQUENCE D: THE EVIDENCE LOCKER
+
+= 11 clue icons. All centered object on transparent background, 200x200px. Noir illustration style with gold accent glow on KEY EVIDENCE items. Grouped by room where found.
+
+INT. MASTER BEDROOM - CONTINUOUS
+
+= Bedroom evidence — 3 clues (1 KEY). Related to Victor and the crime scene itself.
+
+.EVIDENCE: BROKEN PERFUME BOTTLE #D1#
+
+= KEY EVIDENCE. Related suspect: Victor. Found on the nightstand. The liquid smells chemical, not floral.
+
+A shattered ornate glass perfume bottle with its gold stopper displaced. Amber liquid pooling beneath. A faint chemical vapor rising. Gold accent glow around the object suggesting key evidence. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/perfume-bottle.png | size: 200x200px | game_id: perfume_bottle | zk_id: 1 | key: true | suspect: victor]]
+
+.EVIDENCE: SMUDGED FINGERPRINTS #D2#
+
+= Multiple sets on the door handle. Impossible to identify any single person.
+
+A glass surface or doorknob showing multiple overlapping smudged fingerprints. Dusting powder residue visible. The prints are blurred and partial. Centered on transparent background. 200x200px icon style. Ink linework with muted watercolor.
+
+[[file: clues/fingerprints.png | size: 200x200px | game_id: smudged_fingerprints | zk_id: 2 | key: false]]
+
+.EVIDENCE: TORN BUSINESS LETTER #D3#
+
+= Mentions a hostile takeover. Signature is missing. Related suspect: Victor.
+
+A torn piece of formal letterhead with visible handwriting. The paper has ragged torn edges. A wax seal is partially visible. Cream paper with blue-black ink. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/torn-letter.png | size: 200x200px | game_id: torn_letter | zk_id: 3 | key: false | suspect: victor]]
+
+CUT TO:
+
+INT. THE STUDY - CONTINUOUS
+
+= Study evidence — 2 clues (both KEY). Both point to Victor's financial motive.
+
+.EVIDENCE: INSURANCE DOCUMENTS #D4#
+
+= KEY EVIDENCE. Related suspect: Victor. Suspiciously large payout clause, recently amended.
+
+An open leather briefcase with insurance policy documents spilling out. Numbers and legal text partially visible on cream paper. Gold accent glow suggesting key evidence. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/insurance-docs.png | size: 200x200px | game_id: insurance_docs | zk_id: 4 | key: true | suspect: victor]]
+
+.EVIDENCE: CRUMPLED NOTE #D5#
+
+= KEY EVIDENCE. Related suspect: Victor. "We need to talk about what you did. Tonight." Unsigned.
+
+A crumpled handwritten note on cream paper. Hasty, emotional handwriting partially legible. The paper has deep creases and wrinkles. Gold accent glow suggesting key evidence. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/crumpled-note.png | size: 200x200px | game_id: crumpled_note | zk_id: 5 | key: true | suspect: victor]]
+
+CUT TO:
+
+INT. THE LOUNGE - CONTINUOUS
+
+= Lounge evidence — 2 clues (1 KEY). Dr. Webb's alibi and the victim's medication.
+
+.EVIDENCE: PHONE RECORDS #D6#
+
+= KEY EVIDENCE. Related suspect: Marcus. Call log shows 2-minute call, not the "hour-long call" he claims.
+
+A vintage rotary telephone with a paper call log or printout draped over it. Times and phone numbers visible on the paper strip. Gold accent glow suggesting key evidence. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/phone-records.png | size: 200x200px | game_id: phone_records | zk_id: 6 | key: true | suspect: marcus]]
+
+.EVIDENCE: EMPTY MEDICINE BOTTLE #D7#
+
+= Victim's heart medication prescribed by Dr. Webb. Recently emptied. Related suspect: Marcus.
+
+A prescription medicine bottle lying on its side, empty and open. The label shows a name and dosage (illegible but suggested). The cap is off nearby. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/medicine-bottle.png | size: 200x200px | game_id: medicine_bottle | zk_id: 7 | key: false | suspect: marcus]]
+
+CUT TO:
+
+INT. THE KITCHEN - CONTINUOUS
+
+= Kitchen evidence — 2 clues (0 KEY). Wine glass residue and the missing knife.
+
+.EVIDENCE: WINE GLASS WITH RESIDUE #D8#
+
+= Faint discoloration inside. Could be nothing, could be something.
+
+An elegant wine glass with a suspicious discolored residue coating the inside bottom. The glass is half-empty with a dark ring stain. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/wine-glass.png | size: 200x200px | game_id: wine_glass | zk_id: 8 | key: false]]
+
+.EVIDENCE: MISSING CHEF'S KNIFE #D9#
+
+= A gap in the magnetic knife rack. Elena insists she had a full set. Related suspect: Elena.
+
+A magnetic knife rack mounted on tile wall with several chef's knives — and one conspicuous empty slot. The outline/shadow of the missing knife is visible. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/missing-knife.png | size: 200x200px | game_id: missing_knife | zk_id: 9 | key: false | suspect: elena]]
+
+CUT TO:
+
+EXT. MANOR GARDEN - CONTINUOUS
+
+= Garden evidence — 2 clues (1 KEY). Thomas's movements and Ren's photographic proof.
+
+.EVIDENCE: MUDDY FOOTPRINTS #D10#
+
+= Trail from kitchen door to bedroom window. Related suspect: Thomas.
+
+A pair of muddy boot prints on stone — clearly showing a distinctive sole pattern. Mud spatters around the prints. Earth-toned browns against gray stone. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/muddy-footprints.png | size: 200x200px | game_id: muddy_footprints | zk_id: 10 | key: false | suspect: thomas]]
+
+.EVIDENCE: CAMERA WITH PHOTOS #D11#
+
+= KEY EVIDENCE. Related suspect: Thomas. Timestamps show garden was empty at 8 PM — contradicting Thomas's alibi.
+
+A vintage film camera with a developed photograph partially sliding out. The photo shows a garden scene at dusk with a timestamp. Gold accent glow suggesting key evidence. Centered on transparent background. 200x200px icon style. Ink linework with watercolor.
+
+[[file: clues/camera-photos.png | size: 200x200px | game_id: camera_photos | zk_id: 11 | key: true | suspect: thomas]]
+
+===
+
+## SEQUENCE E: THE MURDER WEAPONS
+
+= 5 weapon icons. All centered object on transparent background, 200x200px. Dramatic noir lighting, crimson tint/accent.
+
+.WEAPON: POISON VIAL #E1#
+
+= The suspected murder weapon. Chemical poison — matches the "not floral" perfume bottle residue.
+
+A small glass vial with a cork stopper containing luminous green-purple liquid. A skull-and-crossbones label partially visible. Faint vapor wisps from the top. Crimson undertone accent. Centered on transparent background. 200x200px. Ink linework with watercolor.
+
+[[file: weapons/poison-vial.png | size: 200x200px | game_id: poison_vial | zk_id: 1]]
+
+.WEAPON: KITCHEN KNIFE #E2#
+
+= Missing from Elena's knife rack. But the murder wasn't by knife...
+
+A sharp professional chef's knife with a polished steel blade reflecting dim light. Dark wooden handle with rivets. The blade edge catches a glint of light. Crimson undertone accent. Centered on transparent background. 200x200px. Ink linework with watercolor.
+
+[[file: weapons/kitchen-knife.png | size: 200x200px | game_id: kitchen_knife | zk_id: 2]]
+
+.WEAPON: CANDLESTICK #E3#
+
+= Heavy baroque candlestick. A classic murder mystery weapon.
+
+An ornate silver candlestick with heavy base, no candle. Decorative baroque engravings on the stem. The heavy base suggests it could be a weapon. Crimson undertone accent. Centered on transparent background. 200x200px. Ink linework with watercolor.
+
+[[file: weapons/candlestick.png | size: 200x200px | game_id: candlestick | zk_id: 3]]
+
+.WEAPON: LETTER OPENER #E4#
+
+= From the study desk. Thin, pointed, and ornate.
+
+An ornate metal letter opener with a decorative handle featuring a lion's head pommel. The blade is thin and pointed. Antique brass finish. Crimson undertone accent. Centered on transparent background. 200x200px. Ink linework with watercolor.
+
+[[file: weapons/letter-opener.png | size: 200x200px | game_id: letter_opener | zk_id: 4]]
+
+.WEAPON: GARDEN SHEARS #E5#
+
+= Thomas's tool. Heavy-duty, with rust and dirt.
+
+Heavy-duty garden pruning shears with long metal blades and wooden handles. A spot of rust on one blade. Dirt on the handles. Crimson undertone accent. Centered on transparent background. 200x200px. Ink linework with watercolor.
+
+[[file: weapons/garden-shears.png | size: 200x200px | game_id: garden_shears | zk_id: 5]]
+
+===
+
+> FADE OUT. <

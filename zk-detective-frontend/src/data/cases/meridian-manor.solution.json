@@ -1,0 +1,9 @@
+{
+  "case_id": 1,
+  "solution": {
+    "suspect": "victor",
+    "weapon": "poison_vial",
+    "room": "bedroom"
+  },
+  "salt": "meridian_manor_salt_v1"
+}
