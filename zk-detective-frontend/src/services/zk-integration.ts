@@ -1,44 +1,34 @@
-// F09: ZK Proof Integration — Orchestrates circuit loading + proof generation
+// F09: ZK Proof Integration — Orchestrates proof generation via Web Worker
 //
-// Wraps the existing ZkService (F06) with app-level concerns:
-// - Loading the compiled accusation circuit from a static asset
-// - Computing the Pedersen commitment at init time
+// Wraps the ZkWorkerService with app-level concerns:
+// - Initializing the worker (which fetches circuit JSON internally)
 // - Generating proofs with a clean interface for the game store
 //
 // Non-fatal: if WASM initialization fails, the game continues without ZK proofs.
 
-import { zkService } from './zk-service';
-import type { AccusationProof, AccusationInputs } from './zk-service';
+import { zkWorkerService } from './zk-worker-service';
+import type { WorkerAccusationProof } from './zk-worker-service';
+import type { AccusationProof } from './zk-service';
 import { solutionToNumeric } from '@/data/id-maps';
 
 let zkReady = false;
 
 /**
- * Initialize the ZK subsystem by loading the compiled Noir circuit.
+ * Initialize the ZK subsystem by spawning the Web Worker.
+ * The worker fetches and loads the circuit JSON internally.
  * Returns true if initialization succeeded, false otherwise.
  */
 export async function initializeZk(): Promise<boolean> {
   if (zkReady) return true;
 
   try {
-    // Dynamic import of the compiled circuit JSON.
-    // This file is produced by `nargo compile` in circuits/accusation/
-    // and should be placed in the public/ directory or referenced
-    // via a Vite asset path. Falls back gracefully if not found.
-    const circuitPath = '/circuits/accusation/target/accusation.json';
-    const circuitModule = await fetch(circuitPath)
-      .then(res => res.ok ? res.json() : null)
-      .catch(() => null);
-
-    if (!circuitModule?.bytecode) {
-      console.warn('[ZK] Circuit JSON not found — ZK proofs disabled');
+    const success = await zkWorkerService.initialize();
+    if (!success) {
+      console.warn('[ZK] Worker initialized but circuit not found — ZK proofs disabled');
       return false;
     }
-
-    const circuitJson = circuitModule;
-    await zkService.initialize(circuitJson);
     zkReady = true;
-    console.log('[ZK] Initialized successfully');
+    console.log('[ZK] Initialized successfully (Web Worker)');
     return true;
   } catch (err) {
     console.warn('[ZK] Initialization failed — ZK proofs disabled:', err);
@@ -69,7 +59,7 @@ export async function generateAccusationProof(
     const accused = solutionToNumeric(accusedSolution);
     const solution = solutionToNumeric(actualSolution);
 
-    const inputs: AccusationInputs = {
+    const result: WorkerAccusationProof = await zkWorkerService.proveAccusation({
       accusedSuspect: accused.suspect,
       accusedWeapon: accused.weapon,
       accusedRoom: accused.room,
@@ -78,9 +68,18 @@ export async function generateAccusationProof(
       solutionRoom: solution.room,
       salt,
       commitment,
+    });
+
+    // Wrap worker result in the AccusationProof shape expected by consumers
+    const proof: AccusationProof = {
+      proof: {
+        proof: result.proof,
+        publicInputs: result.publicInputs,
+      },
+      isCorrect: result.isCorrect,
+      publicInputs: result.publicInputs,
     };
 
-    const proof = await zkService.proveAccusation(inputs);
     console.log(`[ZK] Proof generated — correct=${proof.isCorrect}, inputs=${proof.publicInputs.length}`);
     return proof;
   } catch (err) {

@@ -28,9 +28,14 @@ export type {
   GameSummary,
 } from './scoring-service';
 
-// F06: ZK Proof Service
+// F06: ZK Proof Service (direct — used by vitest tests)
 export { ZkService, zkService } from './zk-service';
 export type { AccusationInputs, AccusationProof } from './zk-service';
+
+// ZK Worker Service (browser — Web Worker wrapper)
+export { zkWorkerService } from './zk-worker-service';
+export type { WorkerAccusationProof } from './zk-worker-service';
+export type { AccusationWorkerInputs } from './zk-worker-types';
 
 // F09: Contract + Wallet + ZK Integration
 export { contractService } from './contract-service';
