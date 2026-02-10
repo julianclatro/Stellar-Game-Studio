@@ -1,0 +1,396 @@
+{
+  "case_id": 2,
+  "title": "The Dry Creek Conspiracy",
+  "commitment": "0x301468038e9ba451dfe221b2b16b2d82c98feb9b6456d0024a8df805e4f21a6b",
+  "setting": "Dry Creek's only water source — the underground aquifer feeding the town well — has been contaminated with industrial chemicals. People are getting sick. Livestock are dying. The state sent an investigator. Everyone has a theory, nobody wants to talk, and the truth runs deeper than bad water.",
+  "briefing": "Dry Creek's water turned bad three weeks ago. By the time the state sent someone to look into it, half the town was on medication and the other half was packing their bags. You're the someone they sent. The mayor says it's natural. The doctor says it's the flu. The well says otherwise.",
+  "epilogue": "The permit was a fiction. The state seal, the approval signature, the document number — all fabricated by Elena Voss to give her deal with Beckman Mining a veneer of legality. For six months, industrial waste seeped through the mine shaft into the aquifer that sustained Dry Creek. The mayor who swore to protect her town poisoned it instead — not with her own hands, but with a pen. The redacted minutes, the silenced engineer, the coerced doctor, the compliant sheriff — every thread of the conspiracy led back to the same desk in Town Hall. The water of Dry Creek can be cleaned. The trust will take longer.",
+  "starting_room": "cantina",
+  "room_layout": {
+    "positions": {
+      "town_hall": {
+        "x": 90,
+        "y": 18
+      },
+      "cantina": {
+        "x": 30,
+        "y": 52
+      },
+      "well_house": {
+        "x": 150,
+        "y": 52
+      },
+      "clinic": {
+        "x": 50,
+        "y": 102
+      },
+      "old_mine": {
+        "x": 130,
+        "y": 102
+      }
+    }
+  },
+  "rooms": [
+    {
+      "id": "town_hall",
+      "name": "Town Hall",
+      "abbreviation": "HAL",
+      "narrative_label": "Town Hall, behind closed doors",
+      "description": "Faded civic pride. A building that's seen better days — peeling paint, dusty flags, a portrait of the mayor smiling from the wall. The air conditioner rattles but doesn't cool.",
+      "connections": [
+        "cantina",
+        "well_house"
+      ],
+      "clues": [
+        {
+          "id": "redacted_minutes",
+          "name": "Redacted Council Minutes",
+          "description": "Town council meeting minutes with entire sections blacked out. The redacted dates coincide exactly with when the water first turned. Someone didn't want these discussions on record.",
+          "is_key_evidence": true,
+          "related_suspect": "elena",
+          "icon": "file-text"
+        },
+        {
+          "id": "campaign_funds",
+          "name": "Anonymous Campaign Donation",
+          "description": "The mayor's re-election fund received a six-figure anonymous donation three months before the water crisis. The bank routing number traces to an offshore account.",
+          "is_key_evidence": false,
+          "related_suspect": "elena",
+          "icon": "banknotes"
+        },
+        {
+          "id": "resignation_draft",
+          "name": "Unsent Resignation Letter",
+          "description": "A draft letter from Ines Fuentes to the mayor, found crumpled in the wastebasket. \"I cannot stay silent about what the readings show. If you won't act, I will.\" It was never sent.",
+          "is_key_evidence": true,
+          "related_suspect": "ines",
+          "icon": "mail"
+        }
+      ],
+      "suspects_present": [
+        "elena",
+        "harlan"
+      ]
+    },
+    {
+      "id": "cantina",
+      "name": "The Cantina",
+      "abbreviation": "CAN",
+      "narrative_label": "the Cantina, where deals are whispered",
+      "description": "Dark wood, ceiling fans, the smell of cheap beer and fried food. The only place in Dry Creek where people still gather. A jukebox plays the same twelve songs.",
+      "connections": [
+        "town_hall",
+        "clinic"
+      ],
+      "clues": [
+        {
+          "id": "overheard_note",
+          "name": "Clara's Notepad Entry",
+          "description": "Between drink orders and tab calculations, Clara's handwriting: \"E.V. + R.B. — back room — 11pm — something about 'the mine deal.' She promised 'nobody gets hurt.'\"",
+          "is_key_evidence": true,
+          "related_suspect": "elena",
+          "icon": "notebook"
+        },
+        {
+          "id": "buyout_offer",
+          "name": "Rejected Buyout Letter",
+          "description": "A letter offering Dale Mercer $800,000 for his ranch's water rights. Dated two months before the crisis. The letterhead says \"Beckman Development LLC.\" Dale circled the number but never signed.",
+          "is_key_evidence": false,
+          "related_suspect": "dale",
+          "icon": "file-text"
+        }
+      ],
+      "suspects_present": [
+        "clara",
+        "dale"
+      ]
+    },
+    {
+      "id": "well_house",
+      "name": "The Well House",
+      "abbreviation": "WEL",
+      "narrative_label": "the Well House, where the water turned",
+      "description": "Concrete block building at the edge of town. Industrial pipes, pressure gauges, the hum of pumps. The water in the testing tank has a faint yellow tint that shouldn't be there.",
+      "connections": [
+        "town_hall",
+        "old_mine"
+      ],
+      "clues": [
+        {
+          "id": "tampered_samples",
+          "name": "Diluted Water Samples",
+          "description": "Test tubes with water samples. The recent ones have been diluted with distilled water — someone is faking the readings. The original, undiluted sample in the back glows faintly yellow.",
+          "is_key_evidence": false,
+          "related_suspect": "",
+          "icon": "flask"
+        },
+        {
+          "id": "falsified_log",
+          "name": "Falsified Maintenance Log",
+          "description": "The well house log shows \"routine maintenance\" entries signed by Ines on dates she says she never visited. Someone forged her signature to cover unauthorized access.",
+          "is_key_evidence": false,
+          "related_suspect": "elena",
+          "icon": "clipboard"
+        }
+      ],
+      "suspects_present": [
+        "ines"
+      ]
+    },
+    {
+      "id": "clinic",
+      "name": "The Clinic",
+      "abbreviation": "CLN",
+      "narrative_label": "the Clinic, where the truth was medicated away",
+      "description": "Dr. Ramirez's practice. Fluorescent lights, a waiting room with too many chairs occupied. Medical posters on the walls and a locked filing cabinet that's seen some use lately.",
+      "connections": [
+        "cantina",
+        "old_mine"
+      ],
+      "clues": [
+        {
+          "id": "blood_results",
+          "name": "Hidden Blood Test Results",
+          "description": "Lab results from a dozen patients, hidden in a locked drawer. Heavy metal concentrations 40 times above safe levels. Someone crossed out \"INDUSTRIAL CONTAMINATION\" and wrote \"seasonal influenza.\"",
+          "is_key_evidence": true,
+          "related_suspect": "ramirez",
+          "icon": "heart-pulse"
+        },
+        {
+          "id": "threatening_note",
+          "name": "Mayor's Threatening Note",
+          "description": "A handwritten note on town hall letterhead: \"Keep writing flu diagnoses or the clinic loses its funding next quarter. Don't make me ask twice. — E.V.\" The handwriting matches the mayor's.",
+          "is_key_evidence": true,
+          "related_suspect": "elena",
+          "icon": "message-square"
+        }
+      ],
+      "suspects_present": [
+        "ramirez",
+        "agnes"
+      ]
+    },
+    {
+      "id": "old_mine",
+      "name": "The Old Mine",
+      "abbreviation": "MIN",
+      "narrative_label": "the Old Mine, where the poison entered the earth",
+      "description": "Supposedly sealed since '98. The chain-link fence has been cut and re-tied. Inside: darkness, the smell of chemicals, and the sound of dripping water that feeds into the aquifer below.",
+      "connections": [
+        "well_house",
+        "clinic"
+      ],
+      "clues": [
+        {
+          "id": "chemical_barrels",
+          "name": "Unmarked Chemical Barrels",
+          "description": "Dozens of rusted barrels stashed deep in the mine shaft. No labels, but lot numbers match Beckman Mining Corp inventory. The ground is stained. The acrid smell is overwhelming. This is the source.",
+          "is_key_evidence": true,
+          "related_suspect": "beckman",
+          "icon": "cylinder"
+        },
+        {
+          "id": "forged_clearance",
+          "name": "Forged State Clearance",
+          "description": "An official-looking environmental impact clearance authorizing \"mineral waste remediation\" at this site. But the document number doesn't exist in the state registry. The approval signature was forged.",
+          "is_key_evidence": true,
+          "related_suspect": "elena",
+          "icon": "stamp"
+        }
+      ],
+      "suspects_present": [
+        "beckman",
+        "coyote"
+      ]
+    }
+  ],
+  "suspects": [
+    {
+      "id": "elena",
+      "name": "Elena Voss",
+      "role": "Mayor",
+      "biography": "Elena Voss, the mayor of Dry Creek",
+      "motive": "Approved illegal industrial waste dumping into the abandoned mine shaft in exchange for a massive bribe from Beckman Mining Corp. Forged an environmental permit to make it look legitimate.",
+      "room": "town_hall",
+      "dialogue": {
+        "default": "Thank you for coming out. I want you to know — this town is my life. I've been mayor for twelve years, and seeing people get sick... it keeps me up at night. I've been in contact with the state environmental office daily. We'll get to the bottom of this.",
+        "clue_triggered": {
+          "redacted_minutes": "Those redactions are standard procedure for executive sessions. Legal counsel, personnel matters, pending litigation — it's all protected. I can assure you, nothing in those minutes relates to the water situation.",
+          "campaign_funds": "Anonymous donors have a legal right to privacy. I don't ask where contributions come from — that's what campaign finance law allows. I'm not going to apologize for having supporters.",
+          "overheard_note": "Clara Whitfield gossips for a living. I meet with dozens of people every week — Roy Beckman among them. He has mining interests in the county. That's business, not conspiracy.",
+          "threatening_note": "...Where did you find that? That note is about budget allocation. The clinic was over budget. I was reminding Marcus — Dr. Ramirez — about fiscal responsibility. That's my job.",
+          "forged_clearance": "I've never seen that document before. If it's forged, someone is trying to frame the town administration. This is exactly the kind of distraction that keeps us from solving the real problem."
+        },
+        "confrontation": {
+          "forged_clearance+redacted_minutes": "...You don't understand what it's like to watch a town die. The mine deal was supposed to save Dry Creek — jobs, tax revenue, a future. Beckman promised the waste was inert. By the time the water turned... I'd already signed everything. I couldn't stop it without admitting what I'd done. So I... managed the situation. I told myself it would pass. That the aquifer would dilute it. I was wrong. I know that now."
+        }
+      }
+    },
+    {
+      "id": "harlan",
+      "name": "Tom Harlan",
+      "role": "Sheriff",
+      "biography": "Tom Harlan, the sheriff of Dry Creek",
+      "motive": "Knows the mayor is involved but depends on her for his pension. Looking the other way.",
+      "room": "town_hall",
+      "dialogue": {
+        "default": "Look, I've been sheriff here for twenty years. I know this land. Wells go bad out here — alkaline soil, mineral deposits, seasonal shifts. I did a preliminary investigation myself and found no evidence of tampering. Sometimes the simplest explanation is the right one.",
+        "clue_triggered": {
+          "redacted_minutes": "Council meetings aren't my department. I keep the peace. What goes on in closed session is between the council and their lawyers.",
+          "falsified_log": "Forged signatures? That's concerning, sure. Could be a scheduling error, though. Ines isn't always the most organized.",
+          "overheard_note": "Clara hears what she wants to hear. She's been trying to start drama in this town since she opened that bar."
+        },
+        "confrontation": {
+          "redacted_minutes+falsified_log": "Fine. Fine. I'm not the one who did this, understand? But yeah — I had a feeling something wasn't right. The mayor asked me to sign off on the preliminary investigation as 'inconclusive.' Said it was for the town's stability. My pension is tied to the town budget. If the town goes bankrupt from a scandal... I've got nothing. I looked the other way. I'm not proud of it."
+        }
+      }
+    },
+    {
+      "id": "clara",
+      "name": "Clara Whitfield",
+      "role": "Cantina Owner",
+      "biography": "Clara Whitfield, owner of the only cantina in Dry Creek",
+      "motive": "Overheard the deal but is terrified to speak up.",
+      "room": "cantina",
+      "dialogue": {
+        "default": "Welcome to the only place in Dry Creek that still pours honest drinks. I've been behind this bar for fifteen years. I see everything, I hear everything, and I mind my own business. That's how you survive in a small town.",
+        "clue_triggered": {
+          "overheard_note": "...You found my notepad. I should've torn that page out. Look, I hear things. People forget the bartender has ears. But talking to outsiders about what the mayor does in my back room? That's how you wake up to a health code violation that shuts you down.",
+          "buyout_offer": "Yeah, Dale got that letter. He sat right here, staring at it for two hours. Eight hundred grand for a ranch that's been in his family for three generations. He was tempted. Who wouldn't be?"
+        },
+        "confrontation": {}
+      }
+    },
+    {
+      "id": "dale",
+      "name": "Dale Mercer",
+      "role": "Rancher",
+      "biography": "Dale Mercer, a third-generation cattle rancher outside Dry Creek",
+      "motive": "Was offered a buyout for his water rights before the crisis. He almost took it and feels guilty.",
+      "room": "cantina",
+      "dialogue": {
+        "default": "Sixteen head of cattle dead in three weeks. You want to know what's happening? Someone's poisoning this town's water, and nobody with a badge seems to care. I'm a rancher, not a detective, but even I can see that.",
+        "clue_triggered": {
+          "buyout_offer": "...Where'd you get that? Yeah, I got an offer for my water rights. Before the crisis. Beckman Development — same people who own the old mine. I didn't sell. Wish I could say it was principle, but truth is, the number wasn't high enough.",
+          "campaign_funds": "Anonymous donations? In this town? The mayor can barely get people to pay their parking tickets. That kind of money doesn't come from Dry Creek."
+        },
+        "confrontation": {}
+      }
+    },
+    {
+      "id": "ramirez",
+      "name": "Doc Ramirez",
+      "role": "Town Doctor",
+      "biography": "Dr. Marcus Ramirez, the only physician for forty miles",
+      "motive": "Elena threatened to defund his clinic unless he misdiagnosed patients. Covering up the poisoning.",
+      "room": "clinic",
+      "dialogue": {
+        "default": "We're seeing elevated levels of gastrointestinal complaints, yes. But this is consistent with seasonal patterns — heat stress, dehydration, dietary changes. I've been treating patients and monitoring the situation carefully. There's no reason to panic.",
+        "clue_triggered": {
+          "blood_results": "...Those results were preliminary. Inconclusive. Heavy metals can spike for all sorts of reasons — supplements, well casings, old pipes. I didn't want to cause a panic over incomplete data.",
+          "threatening_note": "That's not — that's taken out of context. The mayor was discussing budget cuts. Every department got that letter. It's fiscal, not... I'm a doctor. I took an oath."
+        },
+        "confrontation": {
+          "blood_results+threatening_note": "I'm not a brave man. Elena told me — if I flagged the contamination, she'd defund the clinic. This is the only medical facility for forty miles. If I close, people die anyway. So I wrote 'seasonal flu' and I prescribed anti-nausea pills and I told myself... I told myself I was choosing the lesser harm. But watching Mrs. Alvarez's tremors get worse every week... I can't keep doing this. The blood work doesn't lie. Those people are being poisoned."
+        }
+      }
+    },
+    {
+      "id": "agnes",
+      "name": "Sister Agnes",
+      "role": "Community Organizer",
+      "biography": "Sister Agnes, who runs the community aid programs from the church",
+      "motive": "Found contamination documents in the town hall dumpster but hid them, afraid of causing panic.",
+      "room": "clinic",
+      "dialogue": {
+        "default": "The community is suffering, and we're doing what we can. The church basement is a distribution point for bottled water now. People come to me with their fears, and I listen. That's all I can offer — a listening ear and clean water.",
+        "clue_triggered": {
+          "resignation_draft": "Ines wrote that? Poor girl. She's been carrying something heavy for months. I've seen her at the church, just sitting in the back pew, staring at nothing. She wanted to do the right thing. Someone stopped her.",
+          "blood_results": "Forty times the safe level? Oh God. The children... we've been bathing the children in that water. I told the mothers it was safe because the doctor said..."
+        },
+        "confrontation": {}
+      }
+    },
+    {
+      "id": "ines",
+      "name": "Ines Fuentes",
+      "role": "Water Engineer",
+      "biography": "Ines Fuentes, the town's water quality engineer",
+      "motive": "Filed a contamination report months ago that was buried. Has a copy but is afraid of losing her job.",
+      "room": "well_house",
+      "dialogue": {
+        "default": "The readings are... within acceptable parameters. I mean, they're elevated, but not technically above the threshold for a contamination advisory. The equipment is old. Calibration drifts. I've been running extra tests to be sure.",
+        "clue_triggered": {
+          "resignation_draft": "...You found that? I wrote it in April. When the first readings came back wrong. I went to the mayor. She said she'd handle it. She told me to recalibrate the sensors and run the tests again. I did. They came back worse. She told me to stop testing.",
+          "tampered_samples": "I didn't dilute those samples. Someone came in here after hours. I noticed the specific gravity was off on the Tuesday batch, but when I reported it, the mayor said I was being paranoid.",
+          "falsified_log": "Those aren't my signatures! I was never here on those dates. Someone has my key — or a copy. I changed the lock last month, but..."
+        },
+        "confrontation": {
+          "resignation_draft+tampered_samples": "I should have sent that letter. I should have gone to the state myself. But Elena said she'd make sure I never worked in water management again. I have student loans. I have a mother in assisted living. So I kept my head down and I watched the numbers climb. The truth is in the original readings — I kept copies. Hidden behind the pressure gauge panel in the back. Check them."
+        }
+      }
+    },
+    {
+      "id": "beckman",
+      "name": "Roy Beckman",
+      "role": "Mining Company Rep",
+      "biography": "Roy Beckman, corporate representative for Beckman Mining Corp",
+      "motive": "Brokered the dumping deal with the mayor. The corporate muscle.",
+      "room": "old_mine",
+      "dialogue": {
+        "default": "I'm here on a routine property assessment. Beckman Mining owns the mineral rights on this parcel — has for decades. The mine itself has been sealed since 1998. I'm just making sure the perimeter fencing is intact. Environmental liability, you understand.",
+        "clue_triggered": {
+          "chemical_barrels": "Those barrels aren't ours. This mine has been sealed — anyone could have dumped material here. Abandoned mines attract illegal dumping all over the southwest. We're a responsible company.",
+          "buyout_offer": "Beckman Development is a separate entity from Beckman Mining. Real estate arm. They made a fair market offer for some water rights in the area. Standard business. Dale Mercer was free to accept or decline.",
+          "campaign_funds": "I wouldn't know anything about campaign donations. That's not my department."
+        },
+        "confrontation": {
+          "chemical_barrels+overheard_note": "...Clara talks too much. Alright. Yes, I met with the mayor. Yes, we discussed the mine. Elena approached us — not the other way around. She said the town needed revenue and she could guarantee a disposal permit. She showed me the paperwork. I assumed it was legitimate. We paid a disposal fee — a significant one — and used the mine shaft for waste remediation. If the permit was forged, that's on her. I want that on the record."
+        }
+      }
+    },
+    {
+      "id": "coyote",
+      "name": "Miguel \"Coyote\" Santos",
+      "role": "Handyman / Drifter",
+      "biography": "Miguel Santos, known around town as Coyote — a handyman who sleeps where he can",
+      "motive": "Used to work at the mine. He SAW the barrels being dumped. Nobody believes the town drifter.",
+      "room": "old_mine",
+      "dialogue": {
+        "default": "I'm nobody. I fix fences, I clear brush, I do whatever work people give me. I sleep where I can. People in this town look through me like I'm part of the landscape. That's fine. Landscape sees things people don't.",
+        "clue_triggered": {
+          "chemical_barrels": "I seen trucks. Two months ago, maybe three. Middle of the night. Coming up the old mine road with their lights off. I was sleeping under the mesquite by the wash. Heard the engines, saw the headlights when they turned in. Next morning, the water tasted different.",
+          "forged_clearance": "Papers don't mean nothing out here. You can stamp a paper and call poison legal. I told the sheriff what I saw. He said I was drunk. I told Clara. She said I should keep my head down. I told the padre. He said to pray."
+        },
+        "confrontation": {}
+      }
+    }
+  ],
+  "weapons": [
+    {
+      "id": "forged_permit",
+      "name": "Forged Environmental Permit",
+      "narrative_label": "a forged environmental impact permit, stamped with the state seal but never issued"
+    },
+    {
+      "id": "chemical_drums",
+      "name": "Industrial Chemical Drums",
+      "narrative_label": "unmarked industrial chemical drums bearing mining company lot numbers"
+    },
+    {
+      "id": "bribe_ledger",
+      "name": "Offshore Bribe Ledger",
+      "narrative_label": "a hidden ledger tracking monthly wire transfers from Beckman Mining Corp"
+    },
+    {
+      "id": "sealed_report",
+      "name": "Buried Water Quality Report",
+      "narrative_label": "a suppressed water quality report showing contamination levels 40x above safe limits"
+    },
+    {
+      "id": "pipeline_valve",
+      "name": "Illegal Pipeline Valve",
+      "narrative_label": "a concealed pipeline valve connecting the mine drainage to the town aquifer"
+    }
+  ]
+}

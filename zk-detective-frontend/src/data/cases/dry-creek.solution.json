@@ -1,0 +1,9 @@
+{
+  "case_id": 2,
+  "solution": {
+    "suspect": "elena",
+    "weapon": "forged_permit",
+    "room": "old_mine"
+  },
+  "salt": "dry_creek_conspiracy_salt_v1"
+}
