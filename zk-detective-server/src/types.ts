@@ -28,10 +28,9 @@ export type ServerMessage =
 export interface PlayerState {
   name: string
   detective: string | null
-  ws: ServerWebSocket<WsData> | null
   currentRoom: string
   clueCount: number
-  roomsVisited: Set<string>
+  roomsVisited: string[]
   wrongAccusations: number
   sessionToken: string
   disconnectedAt: number | null
@@ -43,14 +42,10 @@ export interface GameSession {
   solution: { suspect: string; weapon: string; room: string }
   timeLimit: number
   startedAt: number
-  timerInterval: ReturnType<typeof setInterval> | null
   finished: boolean
 }
 
-export interface WsData {
-  sessionId: string | null
-  playerIndex: number
-}
-
-// Import Bun's WebSocket type
-import type { ServerWebSocket } from 'bun'
+/** Attachment stored on each WebSocket via ctx.acceptWebSocket()/ws.serializeAttachment() */
+export type WsAttachment =
+  | { state: 'queued'; playerName: string; detective: string | null }
+  | { state: 'session'; sessionId: string; playerIndex: number }
