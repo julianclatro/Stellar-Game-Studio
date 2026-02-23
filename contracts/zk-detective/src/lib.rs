@@ -6,12 +6,12 @@
 //! Players investigate a crime scene, collect clues, interrogate suspects,
 //! and make accusations verified against on-chain commitments.
 //!
-//! **Commitment scheme:** `keccak256(suspect_id || weapon_id || room_id || salt)`
-//! The solution is committed on-chain at case creation. Accusations are verified
-//! by recomputing the hash — no one needs to reveal the answer.
+//! **Commitment schemes:**
+//! - Legacy: `keccak256(suspect_id || weapon_id || room_id || salt)` via `accuse()`
+//! - ZK: Poseidon2 commitment + UltraHonk proof via `accuse_zk()` (Protocol 25)
 //!
-//! **Future:** Replace hash checks with Noir UltraHonk ZK proof verification
-//! once the Soroban verifier dependencies are publicly available.
+//! The `accuse_zk` path submits an UltraHonk proof to an on-chain verifier contract
+//! that checks it using Protocol 25's BN254 host functions (g1_mul, g1_add, pairing_check).
 
 use soroban_sdk::{
     contract, contractclient, contracterror, contractimpl, contracttype, vec, Address, Bytes,
@@ -38,6 +38,15 @@ pub trait GameHub {
 }
 
 // ============================================================================
+// UltraHonk Verifier Interface (Protocol 25)
+// ============================================================================
+
+#[contractclient(name = "VerifierClient")]
+pub trait UltraHonkVerifier {
+    fn verify_proof(env: Env, public_inputs: Bytes, proof_bytes: Bytes);
+}
+
+// ============================================================================
 // Errors
 // ============================================================================
 
@@ -61,6 +70,12 @@ pub enum Error {
     InvalidAccusationId = 7,
     /// Session already exists with this ID
     SessionAlreadyExists = 8,
+    /// ZK proof verification failed
+    ProofVerificationFailed = 9,
+    /// Verifier contract address not configured
+    VerifierNotSet = 10,
+    /// Poseidon2 commitment not set for this case
+    PoseidonCommitmentNotSet = 11,
 }
 
 // ============================================================================
@@ -107,6 +122,8 @@ pub enum DataKey {
     Case(u32),
     Game(u32),
     PlayerStats(Address),
+    VerifierAddress,
+    PoseidonCommitment(u32),
 }
 
 // ============================================================================
@@ -430,6 +447,122 @@ impl ZkDetectiveContract {
             .extend_ttl(&key, GAME_TTL_LEDGERS, GAME_TTL_LEDGERS);
 
         Ok(())
+    }
+
+    // ========================================================================
+    // ZK Proof Verification (Protocol 25)
+    // ========================================================================
+
+    /// Set the UltraHonk verifier contract address. Admin only.
+    pub fn set_verifier(env: Env, verifier: Address) {
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .expect("Admin not set");
+        admin.require_auth();
+
+        env.storage()
+            .instance()
+            .set(&DataKey::VerifierAddress, &verifier);
+    }
+
+    /// Set the Poseidon2 commitment for a case. Admin only.
+    /// This is the Poseidon2 hash of [suspect, weapon, room, salt] used by the ZK circuit.
+    pub fn set_poseidon_commitment(env: Env, case_id: u32, commitment: BytesN<32>) {
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::Admin)
+            .expect("Admin not set");
+        admin.require_auth();
+
+        let key = DataKey::PoseidonCommitment(case_id);
+        env.storage().persistent().set(&key, &commitment);
+    }
+
+    /// Get the Poseidon2 commitment for a case.
+    pub fn get_poseidon_commitment(
+        env: Env,
+        case_id: u32,
+    ) -> Result<BytesN<32>, Error> {
+        let key = DataKey::PoseidonCommitment(case_id);
+        env.storage()
+            .persistent()
+            .get(&key)
+            .ok_or(Error::PoseidonCommitmentNotSet)
+    }
+
+    /// Submit an accusation with a ZK proof verified on-chain.
+    ///
+    /// The proof is verified via cross-contract call to the UltraHonk verifier.
+    /// The circuit proves knowledge of the solution and whether the accusation
+    /// matches, without revealing the solution. The `is_correct` parameter must
+    /// match the circuit's public boolean output.
+    pub fn accuse_zk(
+        env: Env,
+        session_id: u32,
+        player: Address,
+        is_correct: bool,
+        proof_bytes: Bytes,
+        public_inputs: Bytes,
+    ) -> Result<bool, Error> {
+        player.require_auth();
+
+        let key = DataKey::Game(session_id);
+        let mut game: GameState = env
+            .storage()
+            .temporary()
+            .get(&key)
+            .ok_or(Error::GameNotFound)?;
+
+        if game.status != GameStatus::Active {
+            return Err(Error::GameNotActive);
+        }
+
+        if player != game.player1 && player != game.player2 {
+            return Err(Error::NotPlayer);
+        }
+
+        // Verify the ZK proof via cross-contract call to verifier
+        let verifier_addr: Address = env
+            .storage()
+            .instance()
+            .get(&DataKey::VerifierAddress)
+            .ok_or(Error::VerifierNotSet)?;
+
+        let verifier = VerifierClient::new(&env, &verifier_addr);
+        verifier.verify_proof(&public_inputs, &proof_bytes);
+
+        // Proof verified successfully -- update game state
+        if is_correct {
+            game.status = GameStatus::Solved;
+            game.winner = Some(player.clone());
+            game.solve_ledger = env.ledger().sequence();
+
+            // Call Game Hub end_game
+            let game_hub_addr: Address = env
+                .storage()
+                .instance()
+                .get(&DataKey::GameHubAddress)
+                .expect("GameHub address not set");
+            let game_hub = GameHubClient::new(&env, &game_hub_addr);
+
+            let player1_won = player == game.player1;
+            game_hub.end_game(&session_id, &player1_won);
+
+            // Update player stats
+            Self::update_player_stats(&env, &player, &game);
+        } else {
+            game.wrong_accusations += 1;
+        }
+
+        env.storage().temporary().set(&key, &game);
+        env.storage()
+            .temporary()
+            .extend_ttl(&key, GAME_TTL_LEDGERS, GAME_TTL_LEDGERS);
+
+        Ok(is_correct)
     }
 
     // ========================================================================

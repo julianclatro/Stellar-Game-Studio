@@ -1,6 +1,7 @@
 import { useGameStore } from '@/store/game-store'
 import { getSuspectImage, getWeaponImage, getRoomImage } from '@/utils/asset-paths'
 import { X, ChevronRight, AlertTriangle, Check, Loader2 } from 'lucide-react'
+import { audioManager } from '@/audio/AudioManager'
 
 export function AccusationModal() {
   const accusationStatus = useGameStore((s) => s.accusationStatus)
@@ -29,20 +30,20 @@ export function AccusationModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 animate-fade-in">
-      <div className="bg-detective-surface border border-detective-border rounded-2xl w-full max-w-xl mx-4 overflow-hidden animate-slide-up">
+      <div className="bg-[#0d0d18] border-2 border-detective-gold/30 rounded-2xl w-full max-w-xl mx-4 overflow-hidden animate-slide-up">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-detective-border">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-detective-crimson" />
-            <h2 className="font-display text-lg font-bold text-detective-ink">
+            <h2 className="font-pixel text-sm font-bold text-detective-ink">
               Make an Accusation
             </h2>
           </div>
           <button
-            onClick={cancelAccusation}
-            className="p-1.5 rounded-lg hover:bg-detective-surface-light transition-colors cursor-pointer"
+            onClick={() => { audioManager.playSfx('uiClick'); cancelAccusation(); }}
+            className="p-1.5 rounded-lg hover:bg-detective-gold/10 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5 text-detective-muted" />
+            <X className="w-5 h-5 text-detective-gold/60 hover:text-detective-gold" />
           </button>
         </div>
 
@@ -155,8 +156,8 @@ export function AccusationModal() {
 
           {accusationStatus === 'selecting' && isComplete && (
             <button
-              onClick={confirmAccusation}
-              className="px-6 py-2 rounded-lg bg-detective-crimson text-white text-sm font-semibold hover:brightness-110 transition-all cursor-pointer"
+              onClick={() => { audioManager.playSfx('uiClick'); confirmAccusation(); }}
+              className="px-6 py-2 rounded-lg bg-detective-crimson text-white text-sm font-pixel font-semibold hover:brightness-110 transition-all cursor-pointer"
             >
               Confirm Accusation
             </button>
@@ -164,8 +165,8 @@ export function AccusationModal() {
 
           {accusationStatus === 'confirming' && !isSubmitting && (
             <button
-              onClick={submitAccusation}
-              className="px-6 py-2 rounded-lg bg-detective-crimson text-white text-sm font-semibold hover:brightness-110 transition-all cursor-pointer"
+              onClick={() => { audioManager.playSfx('uiClick'); submitAccusation(); }}
+              className="px-6 py-2 rounded-lg bg-detective-crimson text-white text-sm font-pixel font-semibold hover:brightness-110 transition-all cursor-pointer"
             >
               Submit Final Answer
             </button>
@@ -194,7 +195,7 @@ function SelectionGrid({
         {items.map((item) => (
           <button
             key={item.id}
-            onClick={() => onSelect(item.id)}
+            onClick={() => { audioManager.playSfx('uiClick'); onSelect(item.id); }}
             className={`
               flex flex-col items-center gap-1.5 px-3 py-2.5 rounded-lg border text-sm font-medium transition-all capitalize cursor-pointer
               ${selected === item.id

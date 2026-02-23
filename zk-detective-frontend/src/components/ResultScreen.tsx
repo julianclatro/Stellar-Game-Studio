@@ -1,29 +1,8 @@
+import { useEffect, useState } from 'react'
 import { useGameStore } from '@/store/game-store'
 import { Trophy, Clock, Search, MapPin, XCircle, RotateCcw, Link, Shield, Cpu, Skull, Swords, Home, FileText } from 'lucide-react'
-
-// Narrative data for the Meridian Manor solution reveal
-const SUSPECT_DETAILS: Record<string, { fullName: string; motive: string }> = {
-  victor: {
-    fullName: 'Victor Ashford, the business partner',
-    motive: 'A hostile takeover gone wrong. Victor stood to gain from a massive insurance payout, and the victim was about to expose the scheme.',
-  },
-}
-
-const WEAPON_LABELS: Record<string, string> = {
-  poison_vial: 'a poison vial disguised as a perfume bottle',
-  kitchen_knife: 'a kitchen knife from the chef\'s set',
-  candlestick: 'a heavy candlestick',
-  letter_opener: 'a sharp letter opener from the study',
-  garden_shears: 'garden shears',
-}
-
-const ROOM_LABELS: Record<string, string> = {
-  bedroom: 'the Bedroom, during the dinner party',
-  kitchen: 'the Kitchen, away from the guests',
-  study: 'the Study, behind closed doors',
-  lounge: 'the Lounge, in plain sight',
-  garden: 'the Garden, under the moonlight',
-}
+import { audioManager } from '@/audio/AudioManager'
+import { toWeapon } from '@/data/types'
 
 export function ResultScreen() {
   const gameSummary = useGameStore((s) => s.gameSummary)
@@ -40,15 +19,44 @@ export function ResultScreen() {
   const playerName = useGameStore((s) => s.playerName)
   const opponent = useGameStore((s) => s.opponent)
 
+  // Animated score count-up
+  const [displayScore, setDisplayScore] = useState(0)
+
+  useEffect(() => {
+    if (!gameSummary) return
+    const target = gameSummary.score
+    const duration = 1500
+    const startTime = Date.now()
+    const tick = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      // Ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplayScore(Math.floor(target * eased))
+      if (progress < 1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }, [gameSummary])
+
   if (!gameSummary) return null
 
   const { score, breakdown, cluesFound, totalClues, roomsVisited, totalRooms, wrongAccusations } =
     gameSummary
 
-  // Build narrative reveal data
-  const suspectInfo = correctSolution ? SUSPECT_DETAILS[correctSolution.suspect] : null
-  const suspectName = correctSolution && caseData
-    ? caseData.suspects.find((s) => s.id === correctSolution.suspect)?.name ?? correctSolution.suspect
+  // Build narrative reveal data from case JSON
+  const guiltyEntity = correctSolution && caseData
+    ? caseData.suspects.find((s) => s.id === correctSolution.suspect)
+    : null
+  const suspectInfo = guiltyEntity && (guiltyEntity.biography || guiltyEntity.motive)
+    ? { fullName: guiltyEntity.biography ?? guiltyEntity.name, motive: guiltyEntity.motive ?? '' }
+    : null
+  const suspectName = guiltyEntity?.name ?? correctSolution?.suspect ?? null
+
+  const weaponLabel = correctSolution && caseData
+    ? caseData.weapons.map(toWeapon).find((w) => w.id === correctSolution.weapon)?.narrative_label ?? correctSolution.weapon
+    : null
+  const roomLabel = correctSolution && caseData
+    ? caseData.rooms.find((r) => r.id === correctSolution.room)?.narrative_label ?? correctSolution.room
     : null
 
   // PvP result determination
@@ -97,7 +105,7 @@ export function ResultScreen() {
                 Case Closed
               </h1>
               <p className="text-detective-muted">
-                Justice has been served at Meridian Manor.
+                The case is closed.
               </p>
             </>
           )}
@@ -109,7 +117,7 @@ export function ResultScreen() {
             <div className="flex items-center gap-2 mb-4">
               <FileText className="w-4 h-4 text-detective-crimson" />
               <h2 className="font-display text-lg font-semibold text-detective-ink">
-                The Truth Behind Meridian Manor
+                The Truth Behind {caseData?.title ?? 'the Case'}
               </h2>
             </div>
             <div className="space-y-3 text-sm text-detective-muted leading-relaxed">
@@ -124,7 +132,7 @@ export function ResultScreen() {
                 <Swords className="w-4 h-4 text-detective-crimson mt-0.5 shrink-0" />
                 <p>
                   The weapon: <span className="text-detective-ink font-semibold">
-                    {WEAPON_LABELS[correctSolution.weapon] ?? correctSolution.weapon}
+                    {weaponLabel ?? correctSolution.weapon}
                   </span>.
                 </p>
               </div>
@@ -132,22 +140,22 @@ export function ResultScreen() {
                 <Home className="w-4 h-4 text-detective-crimson mt-0.5 shrink-0" />
                 <p>
                   It happened in <span className="text-detective-ink font-semibold">
-                    {ROOM_LABELS[correctSolution.room] ?? correctSolution.room}
+                    {roomLabel ?? correctSolution.room}
                   </span>.
                 </p>
               </div>
               {suspectInfo && (
                 <div className="border-t border-detective-border pt-3 mt-3">
-                  <p className="italic">
-                    {suspectInfo.motive}
-                  </p>
-                  <p className="mt-2">
-                    The broken perfume bottle was no perfume at all — it was the
-                    delivery vessel for the poison. The insurance documents and
-                    crumpled threat note sealed Victor's fate. Witnesses saw him
-                    leave the study at 8 PM and return smelling of chemicals. The
-                    case is closed.
-                  </p>
+                  {suspectInfo.motive && (
+                    <p className="italic">
+                      {suspectInfo.motive}
+                    </p>
+                  )}
+                  {caseData?.epilogue && (
+                    <p className="mt-2">
+                      {caseData.epilogue}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -157,11 +165,11 @@ export function ResultScreen() {
         {/* Score */}
         <div className="bg-detective-surface border border-detective-border rounded-xl p-6 mb-4">
           <div className="text-center mb-6">
-            <p className="text-xs text-detective-muted uppercase tracking-wider mb-1">
+            <p className="font-pixel text-[8px] text-detective-muted uppercase mb-2">
               Final Score
             </p>
-            <p className="font-display text-5xl font-bold text-detective-gold">
-              {score.toLocaleString()}
+            <p className="font-pixel text-3xl text-detective-gold animate-score-glow">
+              {displayScore.toLocaleString()}
             </p>
           </div>
 
@@ -280,11 +288,14 @@ export function ResultScreen() {
 
         {/* Return to lobby */}
         <button
-          onClick={resetGame}
-          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-detective-gold text-detective-bg font-semibold rounded-lg hover:brightness-110 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          onClick={() => {
+            audioManager.playSfx('uiClick')
+            resetGame()
+          }}
+          className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-detective-gold text-detective-bg font-semibold rounded-lg hover:brightness-110 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
         >
           <RotateCcw className="w-4 h-4" />
-          Return to Lobby
+          <span className="font-pixel text-[10px]">Return to Lobby</span>
         </button>
 
         {/* Footer — dynamic status */}

@@ -28,6 +28,18 @@ export interface Suspect {
   role: string;
   room: string;
   dialogue: DialogueTree;
+  /** Short biography for result screen (e.g. "Victor Ashford, the business partner") */
+  biography?: string;
+  /** Narrative motive for result screen */
+  motive?: string;
+}
+
+/** A murder weapon option */
+export interface Weapon {
+  id: string;
+  name: string;
+  /** Narrative context label (e.g. "a poison vial disguised as a perfume bottle") */
+  narrative_label: string;
 }
 
 /** A navigable location in the case */
@@ -38,6 +50,10 @@ export interface Room {
   connections: string[];
   clues: Clue[];
   suspects_present: string[];
+  /** Short label for minimap (e.g. "BED", "KIT") */
+  abbreviation?: string;
+  /** Narrative context label (e.g. "the Bedroom, during the dinner party") */
+  narrative_label?: string;
 }
 
 /** The answer: who did it, with what, where */
@@ -54,8 +70,21 @@ export interface CaseData {
   commitment: string;
   rooms: Room[];
   suspects: Suspect[];
-  weapons: string[];
+  weapons: (string | Weapon)[];
   solution: Solution;
+  setting?: string;
+  briefing?: string;
+  epilogue?: string;
+  starting_room?: string;
+  room_layout?: {
+    positions: Record<string, RoomPosition>;
+  };
+}
+
+/** Room position for minimap/briefing SVG */
+export interface RoomPosition {
+  x: number;
+  y: number;
 }
 
 /** Client-safe case data (solution stripped, only commitment hash remains) */
@@ -65,5 +94,41 @@ export interface ClientCaseData {
   commitment: string;
   rooms: Room[];
   suspects: Suspect[];
-  weapons: string[];
+  weapons: (string | Weapon)[];
+
+  /** Narrative fields — the story bible lives in the JSON */
+  setting?: string;
+  briefing?: string;
+  epilogue?: string;
+  starting_room?: string;
+  room_layout?: {
+    positions: Record<string, RoomPosition>;
+  };
+}
+
+/** Derive room connection edges from case data (deduplicated, sorted pairs) */
+export function deriveEdges(rooms: Room[]): [string, string][] {
+  const seen = new Set<string>();
+  const edges: [string, string][] = [];
+  for (const room of rooms) {
+    for (const conn of room.connections) {
+      const key = [room.id, conn].sort().join(':');
+      if (!seen.has(key)) {
+        seen.add(key);
+        edges.push([room.id, conn].sort() as [string, string]);
+      }
+    }
+  }
+  return edges;
+}
+
+/** Extract the weapon ID string from a weapon entry (handles both string and Weapon object formats) */
+export function getWeaponId(w: string | Weapon): string {
+  return typeof w === 'string' ? w : w.id;
+}
+
+/** Get weapon as a Weapon object (handles both formats, uses id as name fallback) */
+export function toWeapon(w: string | Weapon): Weapon {
+  if (typeof w === 'string') return { id: w, name: w, narrative_label: w };
+  return w;
 }

@@ -1,6 +1,5 @@
 [workspace]
 resolver = "2"
-version = "0.1.2"
 members = [
   "contracts/mock-game-hub",
   "contracts/twenty-one",
@@ -8,7 +7,12 @@ members = [
   "contracts/dice-duel",
   "contracts/zk-seek",
   "contracts/zk-detective",
+  "contracts/ultrahonk-verifier",
+  "vendor/ultrahonk-soroban-verifier",
 ]
+
+[workspace.package]
+version = "0.1.2"
 
 [workspace.dependencies]
 soroban-sdk = "25.0.2"

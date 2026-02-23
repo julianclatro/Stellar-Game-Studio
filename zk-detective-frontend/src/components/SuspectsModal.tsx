@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useGameStore } from '@/store/game-store'
 import { getSuspectImage } from '@/utils/asset-paths'
 import { X, Users, MapPin, MessageCircle } from 'lucide-react'
+import { audioManager } from '@/audio/AudioManager'
 
 export function SuspectsModal() {
   const caseData = useGameStore((s) => s.caseData)
@@ -38,23 +39,23 @@ export function SuspectsModal() {
       onClick={closeSuspectsModal}
     >
       <div
-        className="bg-detective-surface border border-detective-border rounded-t-2xl sm:rounded-2xl w-full max-w-lg mx-0 sm:mx-4 max-h-[85vh] overflow-hidden animate-slide-up"
+        className="bg-[#0d0d18] border-2 border-detective-gold/30 rounded-t-2xl sm:rounded-2xl w-full max-w-lg mx-0 sm:mx-4 max-h-[85vh] overflow-hidden animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-detective-border">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-detective-gold/20">
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5 text-detective-gold" />
-            <h2 className="font-display text-lg font-bold text-detective-ink">
+            <h2 className="font-pixel text-sm font-bold text-detective-ink">
               Suspects
             </h2>
             <span className="text-xs text-detective-muted">({caseData.suspects.length})</span>
           </div>
           <button
-            onClick={closeSuspectsModal}
-            className="p-1.5 rounded-lg hover:bg-detective-surface-light transition-colors cursor-pointer"
+            onClick={() => { audioManager.playSfx('uiClick'); closeSuspectsModal(); }}
+            className="p-1.5 rounded-lg hover:bg-detective-gold/10 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5 text-detective-muted" />
+            <X className="w-5 h-5 text-detective-gold/60 hover:text-detective-gold" />
           </button>
         </div>
 
@@ -70,7 +71,7 @@ export function SuspectsModal() {
               return (
                 <button
                   key={suspect.id}
-                  onClick={() => selectSuspect(suspect)}
+                  onClick={() => { audioManager.playSfx('uiClick'); selectSuspect(suspect); }}
                   className={`
                     relative flex flex-col items-center gap-2 p-3 rounded-xl border text-center transition-all cursor-pointer
                     ${isHere
@@ -94,7 +95,7 @@ export function SuspectsModal() {
 
                   {/* Name + role */}
                   <div>
-                    <p className="text-sm font-semibold text-detective-ink">{suspect.name}</p>
+                    <p className="font-pixel text-[9px] font-semibold text-detective-ink">{suspect.name}</p>
                     <p className="text-xs text-detective-muted">{suspect.role}</p>
                   </div>
 

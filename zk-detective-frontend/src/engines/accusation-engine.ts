@@ -2,6 +2,7 @@
 // Manages the accusation flow: selection, validation, submission, and result tracking.
 
 import type { ClientCaseData } from '../data/types';
+import { getWeaponId } from '../data/types';
 
 export type AccusationStatus = 'idle' | 'selecting' | 'confirming' | 'submitting' | 'resolved';
 export type AccusationResult = 'correct' | 'incorrect';
@@ -42,7 +43,7 @@ export class AccusationEngine {
   constructor(caseData: ClientCaseData) {
     this.caseData = caseData;
     this.validSuspects = new Set(caseData.suspects.map(s => s.id));
-    this.validWeapons = new Set(caseData.weapons);
+    this.validWeapons = new Set(caseData.weapons.map(getWeaponId));
     this.validRooms = new Set(caseData.rooms.map(r => r.id));
   }
 
@@ -222,7 +223,7 @@ export class AccusationEngine {
 
   /** Get valid weapon choices */
   getWeaponChoices(): string[] {
-    return [...this.caseData.weapons];
+    return this.caseData.weapons.map(getWeaponId);
   }
 
   /** Get valid room choices (id + name pairs) */

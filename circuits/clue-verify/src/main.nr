@@ -1,5 +1,3 @@
-use std::hash::pedersen_hash;
-
 // ZK Clue Verification Circuit -- ZK Detective: Case Closed on Soroban
 //
 // Proves that a clue response is truthful -- the "honest game master" mechanic.
@@ -11,8 +9,10 @@ use std::hash::pedersen_hash;
 // This means the game master CANNOT lie about clue content. An incorrect
 // clue response would produce an invalid proof.
 //
+// Hash function: Poseidon2 (BN254-native, Protocol 25 aligned)
+//
 // Pre-committed response hashes are computed at build time:
-//   clue_response_hash = pedersen_hash([clue_id, response_value])
+//   clue_response_hash = poseidon2_hash_2([clue_id, response_value])
 //
 // The response_value encodes the clue's relationship to the solution:
 //   - For clues related to the guilty suspect: response_value = 1 (relevant)
@@ -22,6 +22,48 @@ use std::hash::pedersen_hash;
 // This allows the circuit to verify clue truthfulness without encoding
 // the full case data, by checking that the response_value correctly
 // reflects whether the clue's related_suspect matches the solution.
+
+/// Poseidon2 sponge hash for exactly 4 Field elements.
+/// Matches Noir stdlib Poseidon2::hash([a,b,c,d], 4) internal implementation.
+fn poseidon2_hash_4(input: [Field; 4]) -> Field {
+    let two_pow_64: Field = 18446744073709551616;
+    let iv: Field = 4 * two_pow_64;
+
+    let mut state: [Field; 4] = [iv, 0, 0, 0];
+
+    // Absorb first 3 elements (fills one full rate block) -> permute
+    state[0] += input[0];
+    state[1] += input[1];
+    state[2] += input[2];
+    state = std::hash::poseidon2_permutation(state, 4);
+
+    // Absorb remaining element + padding 1 -> permute (squeeze duplex)
+    state[0] += input[3];
+    state[1] += 1;
+    state = std::hash::poseidon2_permutation(state, 4);
+
+    state[0]
+}
+
+/// Poseidon2 sponge hash for exactly 2 Field elements.
+/// Matches Noir stdlib Poseidon2::hash([a,b], 2) internal implementation.
+fn poseidon2_hash_2(input: [Field; 2]) -> Field {
+    let two_pow_64: Field = 18446744073709551616;
+    let iv: Field = 2 * two_pow_64;
+
+    let mut state: [Field; 4] = [iv, 0, 0, 0];
+
+    // Absorb 2 elements + padding 1 (fills one rate block of 3) -> permute
+    state[0] += input[0];
+    state[1] += input[1];
+    state[2] += 1;
+    state = std::hash::poseidon2_permutation(state, 4);
+
+    // Squeeze: empty cache -> permute
+    state = std::hash::poseidon2_permutation(state, 4);
+
+    state[0]
+}
 
 fn main(
     // Private witness -- only the prover knows these
@@ -38,7 +80,7 @@ fn main(
     clue_response_hash: pub Field,
 ) -> pub bool {
     // 1. Verify the prover knows the real solution behind the commitment
-    let computed_commitment = pedersen_hash([
+    let computed_commitment = poseidon2_hash_4([
         solution_suspect,
         solution_weapon,
         solution_room,
@@ -48,7 +90,7 @@ fn main(
 
     // 2. Verify the clue response hash matches
     //    The response hash binds the clue_id to the response_value
-    let computed_response_hash = pedersen_hash([clue_id, response_value]);
+    let computed_response_hash = poseidon2_hash_2([clue_id, response_value]);
     assert(computed_response_hash == clue_response_hash);
 
     // 3. Verify the response_value is truthful
@@ -73,15 +115,14 @@ fn main(
 
 #[test]
 fn test_clue_relevant_to_guilty_suspect() {
-    // Clue related to suspect 1 (guilty), response_value = 1
     let suspect: Field = 1;
     let weapon: Field = 1;
     let room: Field = 1;
     let salt: Field = 42;
     let clue_id: Field = 101;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
-    let response_hash = pedersen_hash([clue_id, 1]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
+    let response_hash = poseidon2_hash_2([clue_id, 1]);
 
     let result = main(
         suspect, weapon, room, salt,
@@ -91,20 +132,19 @@ fn test_clue_relevant_to_guilty_suspect() {
         clue_id,
         response_hash,
     );
-    assert(result); // clue IS relevant
+    assert(result);
 }
 
 #[test]
 fn test_clue_unrelated_suspect() {
-    // Clue related to suspect 3 (not guilty), response_value = 0
     let suspect: Field = 1;
     let weapon: Field = 1;
     let room: Field = 1;
     let salt: Field = 42;
     let clue_id: Field = 201;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
-    let response_hash = pedersen_hash([clue_id, 0]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
+    let response_hash = poseidon2_hash_2([clue_id, 0]);
 
     let result = main(
         suspect, weapon, room, salt,
@@ -114,20 +154,19 @@ fn test_clue_unrelated_suspect() {
         clue_id,
         response_hash,
     );
-    assert(!result); // clue is NOT relevant
+    assert(!result);
 }
 
 #[test]
 fn test_clue_no_suspect_link() {
-    // Clue with no suspect link (related_suspect = 0)
     let suspect: Field = 1;
     let weapon: Field = 1;
     let room: Field = 1;
     let salt: Field = 42;
     let clue_id: Field = 301;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
-    let response_hash = pedersen_hash([clue_id, 0]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
+    let response_hash = poseidon2_hash_2([clue_id, 0]);
 
     let result = main(
         suspect, weapon, room, salt,
@@ -137,21 +176,19 @@ fn test_clue_no_suspect_link() {
         clue_id,
         response_hash,
     );
-    assert(!result); // neutral clue
+    assert(!result);
 }
 
 #[test(should_fail)]
 fn test_lying_about_relevant_clue() {
-    // Prover claims clue is NOT relevant, but it IS (related to guilty suspect)
     let suspect: Field = 1;
     let weapon: Field = 1;
     let room: Field = 1;
     let salt: Field = 42;
     let clue_id: Field = 101;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
-    // Liar computes hash with response_value=0 (claiming not relevant)
-    let fake_response_hash = pedersen_hash([clue_id, 0]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
+    let fake_response_hash = poseidon2_hash_2([clue_id, 0]);
 
     let _ = main(
         suspect, weapon, room, salt,
@@ -165,15 +202,14 @@ fn test_lying_about_relevant_clue() {
 
 #[test(should_fail)]
 fn test_lying_about_irrelevant_clue() {
-    // Prover claims clue IS relevant, but it is NOT
     let suspect: Field = 1;
     let weapon: Field = 1;
     let room: Field = 1;
     let salt: Field = 42;
     let clue_id: Field = 201;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
-    let fake_response_hash = pedersen_hash([clue_id, 1]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
+    let fake_response_hash = poseidon2_hash_2([clue_id, 1]);
 
     let _ = main(
         suspect, weapon, room, salt,
@@ -189,7 +225,7 @@ fn test_lying_about_irrelevant_clue() {
 fn test_invalid_commitment_fails() {
     let fake_commitment: Field = 99999;
     let clue_id: Field = 101;
-    let response_hash = pedersen_hash([clue_id, 1]);
+    let response_hash = poseidon2_hash_2([clue_id, 1]);
 
     let _ = main(
         1, 1, 1, 42,
@@ -208,9 +244,8 @@ fn test_tampered_response_hash_fails() {
     let salt: Field = 42;
     let clue_id: Field = 101;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
-    // Response hash computed with wrong clue_id
-    let tampered_hash = pedersen_hash([999, 1]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
+    let tampered_hash = poseidon2_hash_2([999, 1]);
 
     let _ = main(
         suspect, weapon, room, salt,
@@ -223,37 +258,36 @@ fn test_tampered_response_hash_fails() {
 
 #[test]
 fn test_different_solutions_different_commitments() {
-    let commitment_a = pedersen_hash([1, 1, 1, 100]);
-    let commitment_b = pedersen_hash([2, 1, 1, 100]);
+    let commitment_a = poseidon2_hash_4([1, 1, 1, 100]);
+    let commitment_b = poseidon2_hash_4([2, 1, 1, 100]);
     assert(commitment_a != commitment_b);
 }
 
 #[test]
 fn test_realistic_meridian_manor() {
-    // The Meridian Manor Incident: Victor (1), poison_vial (1), bedroom (1)
     let suspect: Field = 1;
     let weapon: Field = 1;
     let room: Field = 1;
     let salt: Field = 0xDEADBEEF;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
 
     // Clue: perfume_bottle (id=1) related to victor (1) -- guilty suspect
     let clue_perfume: Field = 1;
-    let response_hash_perfume = pedersen_hash([clue_perfume, 1]);
+    let response_hash_perfume = poseidon2_hash_2([clue_perfume, 1]);
     let relevant = main(
         suspect, weapon, room, salt,
-        1, 1,  // related to victor, relevant
+        1, 1,
         commitment, clue_perfume, response_hash_perfume,
     );
     assert(relevant);
 
     // Clue: phone_records (id=5) related to marcus (3) -- not guilty
     let clue_phone: Field = 5;
-    let response_hash_phone = pedersen_hash([clue_phone, 0]);
+    let response_hash_phone = poseidon2_hash_2([clue_phone, 0]);
     let not_relevant = main(
         suspect, weapon, room, salt,
-        3, 0,  // related to marcus, not relevant
+        3, 0,
         commitment, clue_phone, response_hash_phone,
     );
     assert(!not_relevant);
@@ -261,36 +295,35 @@ fn test_realistic_meridian_manor() {
 
 #[test]
 fn test_all_key_evidence_clues() {
-    // Verify all key evidence clues in Meridian Manor
     let suspect: Field = 1; // Victor
     let weapon: Field = 1;
     let room: Field = 1;
     let salt: Field = 777;
 
-    let commitment = pedersen_hash([suspect, weapon, room, salt]);
+    let commitment = poseidon2_hash_4([suspect, weapon, room, salt]);
 
     // perfume_bottle (clue 1): related to victor (1) = guilty -> relevant
-    let h1 = pedersen_hash([1, 1]);
+    let h1 = poseidon2_hash_2([1, 1]);
     let r1 = main(suspect, weapon, room, salt, 1, 1, commitment, 1, h1);
     assert(r1);
 
     // insurance_docs (clue 4): related to victor (1) = guilty -> relevant
-    let h4 = pedersen_hash([4, 1]);
+    let h4 = poseidon2_hash_2([4, 1]);
     let r4 = main(suspect, weapon, room, salt, 1, 1, commitment, 4, h4);
     assert(r4);
 
     // crumpled_note (clue 5): related to victor (1) = guilty -> relevant
-    let h5 = pedersen_hash([5, 1]);
+    let h5 = poseidon2_hash_2([5, 1]);
     let r5 = main(suspect, weapon, room, salt, 1, 1, commitment, 5, h5);
     assert(r5);
 
     // phone_records (clue 6): related to marcus (3) = not guilty -> not relevant
-    let h6 = pedersen_hash([6, 0]);
+    let h6 = poseidon2_hash_2([6, 0]);
     let r6 = main(suspect, weapon, room, salt, 3, 0, commitment, 6, h6);
     assert(!r6);
 
     // camera_photos (clue 9): related to thomas (5) = not guilty -> not relevant
-    let h9 = pedersen_hash([9, 0]);
+    let h9 = poseidon2_hash_2([9, 0]);
     let r9 = main(suspect, weapon, room, salt, 5, 0, commitment, 9, h9);
     assert(!r9);
 }

@@ -685,3 +685,96 @@ fn test_commitment_integrity() {
     let comm_a2 = make_commitment(&env, 1, 1, 1, &salt);
     assert_eq!(comm_a, comm_a2, "Same inputs should produce same hash");
 }
+
+// ============================================================================
+// ZK Verifier Admin Tests
+// ============================================================================
+
+#[test]
+fn test_set_verifier() {
+    let (env, client, _admin, _p1, _p2) = setup_test();
+    let verifier = Address::generate(&env);
+    client.set_verifier(&verifier);
+    // No panic means success; stored in instance storage
+}
+
+#[test]
+fn test_set_poseidon_commitment() {
+    let (env, client, _admin, _p1, _p2) = setup_test();
+    let commitment = BytesN::from_array(&env, &[0x42; 32]);
+    client.set_poseidon_commitment(&1u32, &commitment);
+
+    let stored = client.get_poseidon_commitment(&1u32);
+    assert_eq!(stored, commitment);
+}
+
+#[test]
+fn test_get_poseidon_commitment_not_set() {
+    let (_env, client, _admin, _p1, _p2) = setup_test();
+    let result = client.try_get_poseidon_commitment(&999u32);
+    assert_detective_error(&result, Error::PoseidonCommitmentNotSet);
+}
+
+// ============================================================================
+// accuse_zk Tests
+// ============================================================================
+
+#[test]
+fn test_accuse_zk_verifier_not_set() {
+    let (env, client, _admin, player1, _player2, _salt) = setup_with_game();
+
+    // Without setting verifier, accuse_zk should fail
+    let proof = Bytes::from_slice(&env, &[0u8; 32]);
+    let inputs = Bytes::from_slice(&env, &[0u8; 32]);
+
+    let result = client.try_accuse_zk(&1u32, &player1, &true, &proof, &inputs);
+    assert_detective_error(&result, Error::VerifierNotSet);
+}
+
+#[test]
+fn test_accuse_zk_not_player() {
+    let (env, client, _admin, _player1, _player2, _salt) = setup_with_game();
+
+    let verifier = Address::generate(&env);
+    client.set_verifier(&verifier);
+
+    let outsider = Address::generate(&env);
+    let proof = Bytes::from_slice(&env, &[0u8; 32]);
+    let inputs = Bytes::from_slice(&env, &[0u8; 32]);
+
+    let result = client.try_accuse_zk(&1u32, &outsider, &true, &proof, &inputs);
+    assert_detective_error(&result, Error::NotPlayer);
+}
+
+#[test]
+fn test_accuse_zk_game_not_active() {
+    let (_env, client, _admin, player1, _player2, salt) = setup_with_game();
+
+    // Solve via legacy path first
+    client.accuse(&1u32, &player1, &1u32, &1u32, &1u32, &salt);
+
+    let verifier = Address::generate(&_env);
+    client.set_verifier(&verifier);
+
+    let proof = Bytes::from_slice(&_env, &[0u8; 32]);
+    let inputs = Bytes::from_slice(&_env, &[0u8; 32]);
+
+    let result = client.try_accuse_zk(&1u32, &player1, &true, &proof, &inputs);
+    assert_detective_error(&result, Error::GameNotActive);
+}
+
+#[test]
+fn test_legacy_accuse_still_works_with_verifier_set() {
+    let (env, client, _admin, player1, _player2, salt) = setup_with_game();
+
+    // Set a verifier address
+    let verifier = Address::generate(&env);
+    client.set_verifier(&verifier);
+
+    // Legacy accuse should still work independently
+    let result = client.accuse(&1u32, &player1, &1u32, &1u32, &1u32, &salt);
+    assert!(result);
+
+    let game = client.get_game(&1u32);
+    assert_eq!(game.status, GameStatus::Solved);
+}

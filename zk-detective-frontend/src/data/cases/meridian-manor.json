@@ -2,10 +2,26 @@
   "case_id": 1,
   "title": "The Meridian Manor Incident",
   "commitment": "0xda2854879bbc42fef0fe60c2c4fb568eff7365e08df822e92c04d51eaf7e9a9d",
+  "zk_commitment": "0x0abaab3815d8277645163a7bd9f6aab85d00cc165fb1efe05b867c1558fbb307",
+  "setting": "A prestigious dinner party at Meridian Manor has ended in tragedy. A prominent figure has been found dead in the bedroom, and every guest is a suspect. The police have sealed the manor — no one leaves until the truth is uncovered.",
+  "briefing": "A prominent figure has been found dead at Meridian Manor. Nine suspects. Five rooms. Eleven clues. No one can be trusted — not even the game itself.",
+  "epilogue": "The broken perfume bottle was no perfume at all — it was the delivery vessel for the poison. The insurance documents and crumpled threat note sealed Victor's fate. Witnesses saw him leave the study at 8 PM and return smelling of chemicals. The case is closed.",
+  "starting_room": "bedroom",
+  "room_layout": {
+    "positions": {
+      "bedroom": { "x": 90, "y": 18 },
+      "lounge": { "x": 30, "y": 52 },
+      "study": { "x": 150, "y": 52 },
+      "kitchen": { "x": 50, "y": 102 },
+      "garden": { "x": 130, "y": 102 }
+    }
+  },
   "rooms": [
     {
       "id": "bedroom",
       "name": "The Bedroom",
+      "abbreviation": "BED",
+      "narrative_label": "the Bedroom, during the dinner party",
       "description": "The crime scene. A lavish master bedroom now draped in an unsettling stillness. The body has been removed, but the faint scent of something chemical lingers in the air. Silk curtains frame a window overlooking the garden.",
       "connections": [
         "lounge",
@@ -44,6 +60,8 @@
     {
       "id": "kitchen",
       "name": "The Kitchen",
+      "abbreviation": "KIT",
+      "narrative_label": "the Kitchen, away from the guests",
       "description": "A professional-grade kitchen still warm from the evening's dinner service. Copper pots hang from a ceiling rack. The dessert course sits half-prepared on the marble counter.",
       "connections": [
         "lounge",
@@ -75,6 +93,8 @@
     {
       "id": "study",
       "name": "The Study",
+      "abbreviation": "STU",
+      "narrative_label": "the Study, behind closed doors",
       "description": "Dark wood paneling and leather chairs. A mahogany desk is buried under stacks of legal documents and financial reports. The air smells of old paper and expensive whiskey.",
       "connections": [
         "bedroom",
@@ -106,6 +126,8 @@
     {
       "id": "lounge",
       "name": "The Lounge",
+      "abbreviation": "LOU",
+      "narrative_label": "the Lounge, in plain sight",
       "description": "An elegant sitting room with velvet sofas and a crackling fireplace. A half-finished chess game sits on a side table. The phone sits on its cradle — recently used.",
       "connections": [
         "bedroom",
@@ -137,6 +159,8 @@
     {
       "id": "garden",
       "name": "The Garden",
+      "abbreviation": "GAR",
+      "narrative_label": "the Garden, under the moonlight",
       "description": "A moonlit garden with manicured hedges and a stone path winding between rose bushes. The kitchen door and study window both open onto this space. Fresh mud near the bedroom window.",
       "connections": [
         "kitchen",
@@ -171,6 +195,8 @@
       "id": "victor",
       "name": "Victor Ashford",
       "role": "Business Partner",
+      "biography": "Victor Ashford, the business partner",
+      "motive": "A hostile takeover gone wrong. Victor stood to gain from a massive insurance payout, and the victim was about to expose the scheme.",
       "room": "study",
       "dialogue": {
         "default": "I was reviewing documents all evening. This is a tragedy — we had so many plans together.",
@@ -303,10 +329,10 @@
     }
   ],
   "weapons": [
-    "poison_vial",
-    "kitchen_knife",
-    "candlestick",
-    "letter_opener",
-    "garden_shears"
+    { "id": "poison_vial", "name": "Poison Vial", "narrative_label": "a poison vial disguised as a perfume bottle" },
+    { "id": "kitchen_knife", "name": "Kitchen Knife", "narrative_label": "a kitchen knife from the chef's set" },
+    { "id": "candlestick", "name": "Candlestick", "narrative_label": "a heavy candlestick" },
+    { "id": "letter_opener", "name": "Letter Opener", "narrative_label": "a sharp letter opener from the study" },
+    { "id": "garden_shears", "name": "Garden Shears", "narrative_label": "garden shears" }
   ]
 }

@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from 'react'
 import { useGameStore } from '@/store/game-store'
 import { TopBar } from './TopBar'
-import { RoomView } from './RoomView'
-import { DialoguePanel } from './DialoguePanel'
-import { ActionBar } from './ActionBar'
+import { PixiRoomView } from './PixiRoomView'
+import { AdventureDialogueBox } from './AdventureDialogueBox'
+import { InventoryStrip } from './InventoryStrip'
 import { AccusationModal } from './AccusationModal'
 import { SuspectsModal } from './SuspectsModal'
 import { InventoryModal } from './InventoryModal'
@@ -19,8 +19,10 @@ export function GameScreen() {
   const lastAccusationResult = useGameStore((s) => s.lastAccusationResult)
   const wrongAccusationCount = useGameStore((s) => s.wrongAccusationCount)
   const gameMode = useGameStore((s) => s.gameMode)
+  const selectedSuspect = useGameStore((s) => s.selectedSuspect)
 
   const [showToast, setShowToast] = useState(false)
+  const [screenEffect, setScreenEffect] = useState<'none' | 'red' | 'white'>('none')
   const toastTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   // Timer tick every second
@@ -29,12 +31,17 @@ export function GameScreen() {
     return () => clearInterval(interval)
   }, [tick])
 
-  // Show toast on wrong accusation
+  // Show toast + screen flash on wrong accusation
   useEffect(() => {
     if (lastAccusationResult === 'incorrect') {
       setShowToast(true)
+      setScreenEffect('red')
       clearTimeout(toastTimerRef.current)
       toastTimerRef.current = setTimeout(() => setShowToast(false), 3000)
+      setTimeout(() => setScreenEffect('none'), 400)
+    } else if (lastAccusationResult === 'correct') {
+      setScreenEffect('white')
+      setTimeout(() => setScreenEffect('none'), 500)
     }
     return () => clearTimeout(toastTimerRef.current)
   }, [lastAccusationResult, wrongAccusationCount])
@@ -42,33 +49,52 @@ export function GameScreen() {
   const showAccusationModal = accusationStatus !== 'idle' && accusationStatus !== 'resolved'
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden animate-fade-in">
+    <div className="flex flex-col h-screen overflow-hidden animate-fade-in bg-detective-bg">
       <TopBar />
 
       {/* Wrong accusation toast */}
       {showToast && (
         <div
           key={wrongAccusationCount}
-          className="mx-3 mt-1 flex items-center gap-2 px-4 py-2.5 bg-detective-crimson/15 border border-detective-crimson/30 rounded-lg animate-fade-in"
+          className="absolute top-14 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2.5 bg-detective-crimson/90 border border-detective-crimson rounded-lg animate-fade-in backdrop-blur-sm"
         >
-          <XCircle className="w-4 h-4 text-detective-crimson shrink-0" />
-          <p className="text-sm text-detective-crimson font-medium">
-            Wrong accusation! -500 points. Keep investigating.
+          <XCircle className="w-4 h-4 text-white shrink-0" />
+          <p className="font-pixel text-[9px] text-white">
+            Wrong accusation! -500 points
           </p>
         </div>
       )}
 
-      {/* Main scrollable content */}
-      <main className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
-        <RoomView />
-        <DialoguePanel />
-        {gameMode === 'pvp' && <OpponentFeed />}
+      {/* Screen effect overlay */}
+      {screenEffect !== 'none' && (
+        <div
+          className={`fixed inset-0 z-40 pointer-events-none ${
+            screenEffect === 'red' ? 'screen-flash-red' : 'screen-flash-white'
+          }`}
+        />
+      )}
+
+      {/* Main game area — canvas fills available space */}
+      <main className={`flex-1 min-h-0 relative ${
+        accusationStatus === 'submitting' ? 'animate-accusation-zoom' : ''
+      }`}>
+        <PixiRoomView />
+
+        {/* PvP opponent feed overlay */}
+        {gameMode === 'pvp' && (
+          <div className="absolute top-3 right-3 z-10 w-48">
+            <OpponentFeed />
+          </div>
+        )}
       </main>
 
-      {/* Sticky bottom action bar */}
-      <ActionBar />
+      {/* Adventure dialogue box — overlays bottom of screen when talking */}
+      {selectedSuspect && <AdventureDialogueBox />}
 
-      {/* Floating minimap (bottom-right) */}
+      {/* Inventory strip — always visible at bottom */}
+      <InventoryStrip />
+
+      {/* Floating minimap (bottom-right, above inventory) */}
       <MiniMap />
 
       {/* Modal overlays */}

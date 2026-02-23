@@ -252,6 +252,35 @@ class ContractService {
   }
 
   /**
+   * Submit an accusation with a ZK proof verified on-chain (Protocol 25).
+   * The proof is verified by the UltraHonk verifier contract via cross-contract call.
+   */
+  async accuseZk(
+    sessionId: number,
+    isCorrect: boolean,
+    proofBytes: Uint8Array,
+    publicInputs: Uint8Array,
+  ): Promise<AccuseResult> {
+    if (!player1Wallet) throw new Error('Player wallet required');
+
+    const args = [
+      nativeToScVal(sessionId, { type: 'u32' }),
+      new Address(player1Wallet.publicKey).toScVal(),
+      nativeToScVal(isCorrect, { type: 'bool' }),
+      nativeToScVal(Buffer.from(proofBytes), { type: 'bytes' }),
+      nativeToScVal(Buffer.from(publicInputs), { type: 'bytes' }),
+    ];
+
+    const { resultValue, txHash } = await this.invoke('accuse_zk', args, player1Wallet);
+
+    const result = resultValue?.switch()?.name === 'scvBool'
+      ? resultValue.value() === true
+      : false;
+
+    return { isCorrect: result, txHash };
+  }
+
+  /**
    * Update investigation progress on-chain.
    */
   async updateProgress(

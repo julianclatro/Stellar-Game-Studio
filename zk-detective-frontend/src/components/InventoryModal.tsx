@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useGameStore } from '@/store/game-store'
 import { getClueIcon } from '@/utils/icons'
 import { X, Package, Search } from 'lucide-react'
+import { audioManager } from '@/audio/AudioManager'
 
 export function InventoryModal() {
   const collectedClues = useGameStore((s) => s.collectedClues)
@@ -27,14 +28,14 @@ export function InventoryModal() {
       onClick={closeInventoryModal}
     >
       <div
-        className="bg-detective-surface border border-detective-border rounded-t-2xl sm:rounded-2xl w-full max-w-lg mx-0 sm:mx-4 max-h-[85vh] overflow-hidden animate-slide-up"
+        className="bg-[#0d0d18] border-2 border-detective-gold/30 rounded-t-2xl sm:rounded-2xl w-full max-w-lg mx-0 sm:mx-4 max-h-[85vh] overflow-hidden animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-detective-border">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-detective-gold/20">
           <div className="flex items-center gap-2">
             <Package className="w-5 h-5 text-detective-gold" />
-            <h2 className="font-display text-lg font-bold text-detective-ink">
+            <h2 className="font-pixel text-sm font-bold text-detective-ink">
               Evidence
             </h2>
             <span className={`text-xs font-semibold ${clueCount === totalClues ? 'text-detective-teal' : 'text-detective-muted'}`}>
@@ -42,10 +43,10 @@ export function InventoryModal() {
             </span>
           </div>
           <button
-            onClick={closeInventoryModal}
-            className="p-1.5 rounded-lg hover:bg-detective-surface-light transition-colors cursor-pointer"
+            onClick={() => { audioManager.playSfx('uiClick'); closeInventoryModal(); }}
+            className="p-1.5 rounded-lg hover:bg-detective-gold/10 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5 text-detective-muted" />
+            <X className="w-5 h-5 text-detective-gold/60 hover:text-detective-gold" />
           </button>
         </div>
 

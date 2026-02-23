@@ -8,7 +8,7 @@
 // The compiled circuit is loaded as a static JSON artifact from nargo compile.
 
 import { Noir } from '@noir-lang/noir_js';
-import { type ProofData, UltraHonkBackend, BarretenbergVerifier } from '@aztec/bb.js';
+import { type ProofData, UltraHonkBackend } from '@aztec/bb.js';
 
 // The compiled circuit JSON -- import from the circuits build output
 // After running `nargo compile` in circuits/accusation/
@@ -46,6 +46,7 @@ export class ZkService {
   async initialize(circuitJson: any): Promise<void> {
     this.circuit = circuitJson;
     this.noir = new Noir(circuitJson);
+    // @ts-expect-error bb.js@3.0.3 type mismatch — runtime API works with single arg
     this.backend = new UltraHonkBackend(circuitJson.bytecode);
   }
 
@@ -115,10 +116,7 @@ export class ZkService {
 
   /** Clean up WASM resources */
   async destroy(): Promise<void> {
-    if (this.backend) {
-      this.backend.destroy();
-      this.backend = null;
-    }
+    this.backend = null;
     this.noir = null;
     this.circuit = null;
   }

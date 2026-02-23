@@ -5,8 +5,8 @@ solution_weapon = "1"
 solution_room = "1"
 salt = "12345"
 
-# Commitment: pedersen_hash([1, 1, 1, 12345])
-commitment = "0x0325401f14dc80ecd8223dd78c9bc1b5729fa819618112fbcad4f5bdaf7ed337"
+# Commitment: poseidon2_hash([1, 1, 1, 12345])
+commitment = "0x0abaab3815d8277645163a7bd9f6aab85d00cc165fb1efe05b867c1558fbb307"
 
 # Accusation (correct)
 accused_suspect = "1"

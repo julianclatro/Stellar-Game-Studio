@@ -15,7 +15,8 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    include: ['buffer'],
+    include: ['buffer', 'pixi.js', '@pixi/react'],
+    exclude: ['@aztec/bb.js'],
     esbuildOptions: {
       define: {
         global: 'globalThis',

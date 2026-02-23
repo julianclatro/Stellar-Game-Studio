@@ -1,78 +1,55 @@
-# Feature Index
+# ZK Detective Feature Specs
 
-> ZK Detective: Case Closed on Soroban — Feature Tracker
+## Phase 1-2: Core Game (Complete)
 
-## Status Legend
+| ID | Feature | Status |
+|----|---------|--------|
+| F01 | Case Data System | Done |
+| F02 | Room Navigation | Done |
+| F03 | Inventory System | Done |
+| F04 | Dialogue Engine | Done |
+| F05 | Accusation System | Done |
+| F06 | ZK Accusation Circuit | Done |
+| F07 | ZK Clue Circuit | Done |
+| F08 | Detective Contract | Done |
+| F09 | ZK+Contract Integration | Done |
+| F10 | Game Hub Integration | Done |
+| F11 | Scoring System | Done |
+| F12 | Single Player Flow | Done |
+| F13 | Frontend UI | Done |
+| F14 | PvP WebSocket | Done |
+| F15 | Minimap | Done |
+| F16 | Detective Characters | Done |
 
-| Symbol | Status |
-|--------|--------|
-| ⬜ | Not Started |
-| 🔨 | In Progress |
-| ✅ | Done |
-
-## Phase 1: Core Engine (Hackathon MVP)
-
-| ID | Feature | Status | Priority | Dependencies |
-|----|---------|--------|----------|-------------|
-| [F01](F01-case-data-system.md) | Case Data System | ✅ | P0 | — |
-| [F02](F02-room-navigation.md) | Room Navigation | ✅ | P0 | F01 |
-| [F03](F03-inventory-system.md) | Inventory System | ✅ | P0 | F01, F02 |
-| [F04](F04-dialogue-engine.md) | Dialogue Engine | ✅ | P0 | F01, F03 |
-| [F05](F05-accusation-system.md) | Accusation System | ✅ | P0 | F01, F03 |
-| [F06](F06-zk-accusation-circuit.md) | ZK Accusation Circuit | ✅ | P0 | F01 |
-| [F07](F07-zk-clue-circuit.md) | ZK Clue Circuit | ✅ | P1 | F01, F06 |
-| [F08](F08-detective-contract.md) | Detective Contract | ✅ | P0 | F06 |
-| [F09](F09-leaderboard.md) | ZK+Contract Integration | ✅ | P1 | F08, F11 |
-| [F10](F10-game-hub-integration.md) | Game Hub Integration | ✅ | P0 | F08 |
-| [F11](F11-scoring-system.md) | Scoring System | ✅ | P1 | F01 |
-| [F12](F12-single-player-flow.md) | Single Player Flow | ✅ | P0 | F02-F05, F08 |
-| [F13](F13-frontend-ui.md) | Frontend UI | ✅ | P0 | F02-F05 |
-
-## Phase 2: PvP & Polish
+## Phase 3: Visual Overhaul
 
 | ID | Feature | Status | Priority | Dependencies |
 |----|---------|--------|----------|-------------|
-| [F14](F14-pvp-websocket.md) | PvP WebSocket | ✅ | P1 | F12 |
-| [F15](F15-minimap.md) | Minimap | ✅ | P2 | F14 |
-| [F16](F16-detective-characters.md) | Detective Characters | ✅ | P2 | F13 |
+| [F17](F17-audio-assets.md) | Audio Assets & Wiring | Done | P0 | F13 |
+| [F18](F18-room-transitions.md) | Room Transitions & Effects | Done | P0 | F13, F17 |
+| [F19](F19-dialogue-polish.md) | Dialogue Blip & Typewriter Polish | Done | P1 | F17 |
+| [F20](F20-modal-restyling.md) | Adventure Modal Restyling | Done | P1 | F13 |
+| [F21](F21-screen-polish.md) | Screen Polish | Done | P1 | F13, F17 |
+| [F22](F22-custom-cursors.md) | Custom Cursors & Hotspots | Done | P2 | F13 |
+| [F23](F23-config-fixes.md) | Config Fixes & Build Hardening | Done | P0 | — |
+| [F24](F24-game-animations.md) | Clue & Accusation Animations | Done | P2 | F18 |
 
-## Dependency Graph
+## Dependency Graph / Build Order
 
 ```
-F01 (Case Data) ─────────────────────────────────────────┐
-  ├── F02 (Room Nav) ──┐                                  │
-  │     └── F03 (Inventory) ──┐                           │
-  │           ├── F04 (Dialogue)──┐                       │
-  │           └── F05 (Accusation)┤                       │
-  │                               ├── F12 (Single Player) │
-  │                               ├── F13 (Frontend UI)   │
-  │                               │     └── F16 (Characters)
-  ├── F06 (ZK Accusation) ──┐    │                        │
-  │     └── F07 (ZK Clue)   │    │                        │
-  │                          │    │                        │
-  │     F08 (Contract) ─────┘────┘                        │
-  │       ├── F10 (Game Hub)                              │
-  │       └── F09 (Leaderboard) ← F11 (Scoring) ─────────┘
-  │
-  └── F11 (Scoring)
-                    F12 → F14 (PvP WebSocket) → F15 (Minimap)
+F23 (Config Fixes)         — no deps, unblocks reliable builds
+  ↓
+F17 (Audio Assets)         — depends on F13 (done)
+  ↓
+F18 (Room Transitions)     — depends on F17
+  ↓
+F20 (Modal Restyling)      — depends on F13 (done), parallel with F17-F18
+F22 (Custom Cursors)       — depends on F13 (done), parallel with F17-F18
+  ↓
+F19 (Dialogue Polish)      — depends on F17
+F21 (Screen Polish)        — depends on F17
+  ↓
+F24 (Animations)           — depends on F18
 ```
 
-## Build Order (Recommended)
-
-1. **F01** — Case Data System (foundation — everything depends on this)
-2. **F06** — ZK Accusation Circuit (can be built in parallel with frontend)
-3. **F02** — Room Navigation
-4. **F03** — Inventory System
-5. **F04** — Dialogue Engine
-6. **F05** — Accusation System
-7. **F08** — Detective Contract
-8. **F10** — Game Hub Integration
-9. **F11** — Scoring System
-10. **F07** — ZK Clue Circuit
-11. **F13** — Frontend UI (integrates F02-F05)
-12. **F12** — Single Player Flow (end-to-end)
-13. **F09** — Leaderboard
-14. **F14** — PvP WebSocket
-15. **F15** — Minimap
-16. **F16** — Detective Characters
+Recommended execution order: F23 → F17 → F18 → F20 → F22 → F19 → F21 → F24

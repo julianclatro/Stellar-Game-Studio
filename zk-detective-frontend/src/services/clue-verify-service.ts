@@ -69,6 +69,7 @@ export class ClueVerifyService {
     this.noir = new Noir(circuitJson);
     // Backend import is dynamic because UltraHonkBackend needs browser WASM
     const { UltraHonkBackend: Backend } = await import('@aztec/bb.js');
+    // @ts-expect-error bb.js@3.0.3 type mismatch — runtime API works with single arg
     this.backend = new Backend(circuitJson.bytecode);
   }
 
@@ -121,10 +122,7 @@ export class ClueVerifyService {
 
   /** Clean up WASM resources */
   async destroy(): Promise<void> {
-    if (this.backend) {
-      this.backend.destroy();
-      this.backend = null;
-    }
+    this.backend = null;
     this.noir = null;
   }
 

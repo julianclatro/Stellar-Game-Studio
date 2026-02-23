@@ -10,6 +10,7 @@
 :root {
   --font-display: "Playfair Display", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
+  --font-pixel: "Press Start 2P", monospace;
   --color-bg: #0a0a0f;
   --color-surface: #14141f;
   --color-surface-light: #1e1e2e;
@@ -101,4 +102,209 @@ h1, h2, h3, h4 {
 
 .animate-slide-up {
   animation: slide-up 0.5s ease-out;
+}
+
+/* Pixel font utility */
+.font-pixel {
+  font-family: var(--font-pixel);
+}
+
+/* Adventure game canvas container */
+.adventure-canvas {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+}
+
+/* Typewriter cursor blink */
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  animation: blink-cursor 0.8s step-end infinite;
+}
+
+/* Inventory strip scroll */
+.inventory-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.inventory-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Screen flash overlay */
+@keyframes screen-flash {
+  0% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+.screen-flash-white {
+  animation: screen-flash 0.5s ease-out forwards;
+  background: white;
+}
+
+.screen-flash-red {
+  animation: screen-flash 0.4s ease-out forwards, screen-shake 0.4s ease-out;
+  background: #c8463b;
+}
+
+/* Screen shake */
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-4px, 2px); }
+  20% { transform: translate(4px, -2px); }
+  30% { transform: translate(-3px, -1px); }
+  40% { transform: translate(3px, 1px); }
+  50% { transform: translate(-2px, 2px); }
+  60% { transform: translate(2px, -1px); }
+  70% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+}
+
+/* Sparkle float */
+@keyframes sparkle-float {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-4px) scale(1.2); opacity: 1; }
+}
+
+.animate-sparkle {
+  animation: sparkle-float 1.5s ease-in-out infinite;
+}
+
+/* Custom cursor classes for adventure canvas */
+.cursor-investigate {
+  cursor: crosshair;
+}
+
+.cursor-suspect {
+  cursor: pointer;
+}
+
+.cursor-clue {
+  cursor: grab;
+}
+
+.cursor-exit {
+  cursor: pointer;
+}
+
+/* Hotspot glow animation */
+@keyframes hotspot-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(212, 168, 67, 0.3)); }
+  50% { filter: drop-shadow(0 0 12px rgba(212, 168, 67, 0.7)); }
+}
+
+.hotspot-glow {
+  animation: hotspot-glow 1.5s ease-in-out infinite;
+}
+
+/* Pulsing indicator */
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.animate-gentle-pulse {
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+/* Flicker effect for title screen lights */
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96% { opacity: 0.6; }
+  97% { opacity: 0.9; }
+  98% { opacity: 0.4; }
+  99% { opacity: 0.8; }
+}
+
+.animate-flicker {
+  animation: flicker 4s ease-in-out infinite;
+}
+
+/* CRT scanline overlay */
+.scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.04) 2px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
+  pointer-events: none;
+}
+
+/* Dramatic button entrance */
+@keyframes button-entrance {
+  0% { opacity: 0; transform: translateY(20px) scale(0.9); }
+  60% { transform: translateY(-4px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-button-entrance {
+  animation: button-entrance 0.8s ease-out 0.5s both;
+}
+
+/* Case file torn edge effect via box-shadow */
+.case-file {
+  background:
+    linear-gradient(135deg, #14141f 0%, #1a1a2a 50%, #14141f 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(212, 168, 67, 0.15),
+    0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Dashed border animation */
+@keyframes dash-march {
+  to { stroke-dashoffset: -16; }
+}
+
+.dash-march {
+  animation: dash-march 1.5s linear infinite;
+}
+
+/* Clue collection: item slides into inventory from above */
+@keyframes inventory-receive {
+  0% { transform: translateY(-20px) scale(1.3); opacity: 0; }
+  40% { transform: translateY(2px) scale(1.05); opacity: 1; }
+  60% { transform: translateY(-3px) scale(0.98); }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.animate-inventory-receive {
+  animation: inventory-receive 0.5s ease-out;
+}
+
+/* Golden sparkle burst on clue pickup */
+@keyframes sparkle-burst {
+  0% { box-shadow: 0 0 0 0 rgba(212, 168, 67, 0.6); }
+  50% { box-shadow: 0 0 20px 10px rgba(212, 168, 67, 0.3); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 168, 67, 0); }
+}
+
+.animate-sparkle-burst {
+  animation: sparkle-burst 0.6s ease-out;
+}
+
+/* Accusation zoom effect */
+@keyframes accusation-zoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.animate-accusation-zoom {
+  animation: accusation-zoom 0.8s ease-in-out;
+}
+
+/* Score glow when count-up finishes */
+@keyframes score-glow {
+  0% { text-shadow: 0 0 0 rgba(212, 168, 67, 0); }
+  50% { text-shadow: 0 0 30px rgba(212, 168, 67, 0.8), 0 0 60px rgba(212, 168, 67, 0.4); }
+  100% { text-shadow: 0 0 10px rgba(212, 168, 67, 0.3); }
+}
+
+.animate-score-glow {
+  animation: score-glow 1s ease-out 1.5s both;
 }

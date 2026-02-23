@@ -16,7 +16,7 @@ import type { AccusationStatus, AccusationResult } from '@/engines/accusation-en
 import { generateSummary, formatTime } from '@/services/scoring-service'
 import type { GameSummary } from '@/services/scoring-service'
 import { contractService } from '@/services/contract-service'
-import { initializeZk, generateAccusationProof, isZkReady } from '@/services/zk-integration'
+import { initializeZk, generateAccusationProof, isZkReady, serializePublicInputs } from '@/services/zk-integration'
 import type { AccusationProof } from '@/services/zk-integration'
 import { SUSPECT_IDS, WEAPON_IDS, ROOM_IDS } from '@/data/id-maps'
 import { multiplayerService } from '@/services/multiplayer-service'
@@ -609,47 +609,65 @@ export const useGameStore = create<GameState>((set, get) => {
         submitted.weapon === solution.weapon &&
         submitted.room === solution.room
 
-      // Run ZK proof + contract call in parallel (non-blocking)
-      const promises: Promise<any>[] = []
+      // Sequential flow: generate ZK proof first, then submit to contract
+      // This enables on-chain proof verification via accuse_zk (Protocol 25)
+      let zkProofGenerated = false
 
-      // ZK proof generation (client-side)
       if (zkReady) {
-        promises.push(
-          generateAccusationProof(
+        try {
+          // Use ZK-specific salt and commitment (Poseidon2 Field elements)
+          // Falls back to legacy values if zk_ fields not present
+          const zkSalt = (solutionJson as any).zk_salt ?? solutionJson.salt
+          const zkCommitment = (caseJson as any).zk_commitment ?? (caseJson as any).commitment ?? ''
+          const proof = await generateAccusationProof(
             { suspect: submitted.suspect, weapon: submitted.weapon, room: submitted.room },
             solution,
-            solutionJson.salt,
-            // Pedersen commitment from solution JSON (for ZK circuit)
-            (caseJson as any).commitment ?? '',
-          ).then((proof) => {
-            if (proof) set({ zkProof: proof })
-          })
-        )
+            zkSalt,
+            zkCommitment,
+          )
+          if (proof) {
+            set({ zkProof: proof })
+            zkProofGenerated = true
+
+            // Submit ZK proof on-chain via accuse_zk
+            if (contractConnected && sessionId != null) {
+              try {
+                // proof.proof.proof is already Uint8Array from bb.js
+                const proofBytes = proof.proof.proof
+                const publicInputsBytes = serializePublicInputs(proof.publicInputs)
+                const result = await contractService.accuseZk(
+                  sessionId, proof.isCorrect, proofBytes, publicInputsBytes,
+                )
+                set({ txHash: result.txHash })
+                console.log(`[F09] accuse_zk: correct=${result.isCorrect}, tx=${result.txHash}`)
+              } catch (err) {
+                console.warn('[F09] accuse_zk failed, falling back to legacy accuse:', err)
+                zkProofGenerated = false // trigger fallback
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('[ZK] Proof generation failed:', err)
+        }
       }
 
-      // Contract accusation (on-chain)
-      if (contractConnected && sessionId != null) {
+      // Fallback: legacy accuse (keccak hash) if ZK proof not available
+      if (!zkProofGenerated && contractConnected && sessionId != null) {
         const suspectId = SUSPECT_IDS[submitted.suspect]
         const weaponId = WEAPON_IDS[submitted.weapon]
         const roomId = ROOM_IDS[submitted.room]
 
         if (suspectId && weaponId && roomId) {
-          promises.push(
-            contractService.accuse(
+          try {
+            const result = await contractService.accuse(
               sessionId, suspectId, weaponId, roomId, solutionJson.salt,
-            ).then((result) => {
-              set({ txHash: result.txHash })
-              console.log(`[F09] Contract accuse: correct=${result.isCorrect}, tx=${result.txHash}`)
-            }).catch((err) => {
-              console.warn('[F09] Contract accuse failed:', err)
-            })
-          )
+            )
+            set({ txHash: result.txHash })
+            console.log(`[F09] Legacy accuse: correct=${result.isCorrect}, tx=${result.txHash}`)
+          } catch (err) {
+            console.warn('[F09] Legacy accuse failed:', err)
+          }
         }
-      }
-
-      // Wait for all parallel operations
-      if (promises.length > 0) {
-        await Promise.allSettled(promises)
       }
 
       set({ isSubmitting: false })

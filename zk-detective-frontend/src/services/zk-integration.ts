@@ -92,4 +92,32 @@ export function isZkReady(): boolean {
   return zkReady;
 }
 
+/**
+ * Serialize public inputs from hex strings to a flat Uint8Array
+ * suitable for the Soroban verifier contract (32-byte aligned fields).
+ */
+export function serializePublicInputs(publicInputs: string[]): Uint8Array {
+  const result = new Uint8Array(publicInputs.length * 32);
+  for (let i = 0; i < publicInputs.length; i++) {
+    // Each public input is a hex-encoded 32-byte field element
+    const hex = publicInputs[i].replace(/^0x/, '').padStart(64, '0');
+    for (let j = 0; j < 32; j++) {
+      result[i * 32 + j] = parseInt(hex.substr(j * 2, 2), 16);
+    }
+  }
+  return result;
+}
+
+/**
+ * Serialize proof bytes from hex string to Uint8Array.
+ */
+export function serializeProof(proofHex: string): Uint8Array {
+  const hex = proofHex.replace(/^0x/, '');
+  const result = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < result.length; i++) {
+    result[i] = parseInt(hex.substr(i * 2, 2), 16);
+  }
+  return result;
+}
+
 export type { AccusationProof };

@@ -88,3 +88,8 @@ try {
     process.exit(1);
   }
 }
+
+console.log('\n--- Poseidon2 Commitment (for accuse_zk) ---');
+console.log('To enable on-chain ZK proof verification:');
+console.log('  1. bun run scripts/deploy-verifier.ts');
+console.log('  2. bun run scripts/compute-poseidon-commitment.ts');

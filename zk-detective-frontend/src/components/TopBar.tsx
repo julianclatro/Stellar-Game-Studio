@@ -1,6 +1,7 @@
 import { useGameStore } from '@/store/game-store'
 import { DETECTIVES } from '@/data/detectives'
 import { Clock, Search, MapPin, Eye, Timer } from 'lucide-react'
+import { AudioToggle } from './AudioToggle'
 
 export function TopBar() {
   const formattedTime = useGameStore((s) => s.formattedTime)
@@ -19,15 +20,16 @@ export function TopBar() {
   const detective = selectedDetective ? DETECTIVES[selectedDetective] : null
 
   return (
-    <div className="flex items-center justify-between px-4 py-2.5 bg-detective-surface border-b border-detective-border">
-      {/* Left: detective + case title */}
+    <div className="flex items-center justify-between px-4 py-2 bg-black/80 backdrop-blur-sm border-b border-detective-border">
+      {/* Left: detective + case title + audio toggle */}
       <div className="flex items-center gap-2">
         {detective && (
           <span className="text-base" title={detective.name}>{detective.emoji}</span>
         )}
-        <h2 className="font-display text-sm font-semibold text-detective-gold">
+        <h2 className="font-pixel text-[9px] text-detective-gold">
           {caseData?.title ?? 'ZK Detective'}
         </h2>
+        <AudioToggle />
       </div>
 
       {/* Center: stats */}
